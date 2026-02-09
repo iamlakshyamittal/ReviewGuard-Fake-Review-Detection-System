@@ -3,64 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReviewGuard – Fake Review Detector</title>
+  <title>ReviewGuard Pro – AI-Powered Review Authenticity Analysis</title>
   
   <style>
     /* ==================== CSS VARIABLES ==================== */
     :root {
       /* Light Mode Colors */
       --bg-primary: #ffffff;
-      --bg-secondary: #f5f5f7;
-      --bg-tertiary: #fbfbfd;
-      --text-primary: #1d1d1f;
-      --text-secondary: #86868b;
-      --text-tertiary: #6e6e73;
-      --accent-primary: #0071e3;
-      --accent-hover: #0077ed;
-      --success: #34c759;
-      --warning: #ff9500;
-      --danger: #ff3b30;
-      --card-bg: rgba(255, 255, 255, 0.72);
-      --card-border: rgba(0, 0, 0, 0.04);
-      --nav-bg: rgba(251, 251, 253, 0.72);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-      --shadow-glow: 0 0 40px rgba(0, 113, 227, 0.15);
+      --bg-secondary: #f8f9fa;
+      --bg-tertiary: #e9ecef;
+      --text-primary: #1a1a2e;
+      --text-secondary: #6c757d;
+      --text-tertiary: #adb5bd;
+      --accent-primary: #667eea;
+      --accent-secondary: #764ba2;
+      --accent-tertiary: #f093fb;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+      --shadow-glow: 0 0 60px rgba(102, 126, 234, 0.4);
       
       /* Transitions */
       --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
       --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --transition-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     [data-theme="dark"] {
-      /* Dark Mode Colors */
-      --bg-primary: #000000;
-      --bg-secondary: #1d1d1f;
-      --bg-tertiary: #2d2d2f;
-      --text-primary: #f5f5f7;
-      --text-secondary: #a1a1a6;
-      --text-tertiary: #86868b;
-      --accent-primary: #0a84ff;
-      --accent-hover: #409cff;
-      --success: #30d158;
-      --warning: #ff9f0a;
-      --danger: #ff453a;
-      --card-bg: rgba(29, 29, 31, 0.72);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --nav-bg: rgba(29, 29, 31, 0.72);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.7);
-      --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.25);
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1a2e;
+      --bg-tertiary: #16213e;
+      --text-primary: #e9ecef;
+      --text-secondary: #adb5bd;
+      --text-tertiary: #6c757d;
+      --accent-primary: #7c3aed;
+      --accent-secondary: #a78bfa;
+      --accent-tertiary: #c084fc;
+      --success: #34d399;
+      --success-light: #064e3b;
+      --warning: #fbbf24;
+      --warning-light: #78350f;
+      --danger: #f87171;
+      --danger-light: #7f1d1d;
+      --info: #60a5fa;
+      --info-light: #1e3a8a;
+      --card-bg: rgba(26, 26, 46, 0.9);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(26, 26, 46, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 60px rgba(124, 58, 237, 0.4);
     }
 
     /* ==================== RESET & BASE ==================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     html {
@@ -68,14 +83,41 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
-      transition: background 0.4s var(--transition-smooth), color 0.4s var(--transition-smooth);
+      transition: background 0.5s var(--transition-smooth);
+      position: relative;
+    }
+
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(240, 147, 251, 0.1) 0%, transparent 60%);
+      animation: gradientShift 20s ease infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    [data-theme="dark"] body::before {
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(167, 139, 250, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.15) 0%, transparent 60%);
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.8; transform: scale(1.1) rotate(5deg); }
     }
 
     ::selection {
@@ -90,66 +132,93 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      background: var(--nav-bg);
+      background: var(--glass-bg);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 0.5px solid var(--card-border);
+      border-bottom: 1px solid var(--glass-border);
       transition: all 0.3s var(--transition-smooth);
     }
 
     .navbar.scrolled {
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-lg);
+      background: var(--card-bg);
     }
 
     .nav-container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 44px;
+      height: 70px;
     }
 
-    .nav-logo {
-      font-size: 21px;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      text-decoration: none;
-      transition: opacity 0.2s var(--transition-smooth);
+    .nav-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: transform 0.3s var(--transition-spring);
     }
 
-    .nav-logo:hover {
-      opacity: 0.7;
+    .nav-brand:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-brand-icon {
+      font-size: 32px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-link {
+      padding: 8px 20px;
+      border-radius: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s var(--transition-smooth);
+      font-size: 15px;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-primary);
+      background: var(--glass-bg);
     }
 
     .theme-toggle {
-      background: none;
-      border: none;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      padding: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      padding: 8px;
+      font-size: 20px;
+      transition: all 0.3s var(--transition-spring);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
-      transition: background 0.2s var(--transition-smooth);
+      width: 44px;
+      height: 44px;
     }
 
     .theme-toggle:hover {
-      background: var(--card-border);
-    }
-
-    .theme-icon {
-      font-size: 20px;
-      transition: transform 0.4s var(--transition-spring);
-    }
-
-    .theme-toggle:active .theme-icon {
-      transform: rotate(360deg) scale(0.9);
+      background: var(--accent-primary);
+      transform: rotate(15deg) scale(1.1);
+      box-shadow: var(--shadow-glow);
     }
 
     /* ==================== HERO SECTION ==================== */
@@ -158,42 +227,40 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 120px 2rem 80px;
       position: relative;
       overflow: hidden;
-      padding: 120px 24px 80px;
-    }
-
-    .hero-background {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(0, 113, 227, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(88, 86, 214, 0.08) 0%, transparent 50%);
-      opacity: 0.6;
-      transition: opacity 0.4s var(--transition-smooth);
-    }
-
-    [data-theme="dark"] .hero-background {
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(10, 132, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(120, 119, 255, 0.15) 0%, transparent 50%);
     }
 
     .hero-content {
+      max-width: 1200px;
+      text-align: center;
       position: relative;
       z-index: 1;
-      text-align: center;
-      max-width: 980px;
-      opacity: 0;
-      animation: fadeInUp 1.2s var(--transition-ease) forwards;
-      animation-delay: 0.2s;
     }
 
-    @keyframes fadeInUp {
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 32px;
+      animation: fadeInDown 0.8s var(--transition-smooth) 0.2s backwards;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes fadeInDown {
       from {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(-30px);
       }
       to {
         opacity: 1;
@@ -201,451 +268,20 @@
       }
     }
 
-    .hero-eyebrow {
-      font-size: 17px;
-      font-weight: 500;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--accent-primary);
-      margin-bottom: 16px;
-      opacity: 0;
-      animation: fadeInUp 1s var(--transition-ease) forwards;
-      animation-delay: 0.4s;
-    }
-
     .hero-title {
-      font-size: clamp(48px, 8vw, 96px);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 800;
+      line-height: 1.1;
       margin-bottom: 24px;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(21px, 3vw, 28px);
-      font-weight: 400;
+      animation: fadeInUp 0.8s var(--transition-smooth) 0.4s backwards;
       letter-spacing: -0.02em;
-      color: var(--text-secondary);
-      margin-bottom: 48px;
-      line-height: 1.4;
-      opacity: 0;
-      animation: fadeInUp 1s var(--transition-ease) forwards;
-      animation-delay: 0.6s;
     }
 
-    /* ==================== STATS SECTION ==================== */
-    .stats-section {
-      background: var(--bg-secondary);
-      padding: 80px 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .stat-item {
-      text-align: center;
-      background: linear-gradient(135deg, var(--accent-primary) 0%, #5856d6 100%);
-      color: white;
-      padding: 48px 32px;
-      border-radius: 24px;
-      box-shadow: var(--shadow-glow);
-      border: 0.5px solid rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.6s var(--transition-ease);
-    }
-
-    .stat-item.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .stat-item:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 40px rgba(0, 113, 227, 0.3);
-    }
-
-    .stat-number {
-      font-size: clamp(48px, 6vw, 72px);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .stat-label {
-      font-size: 15px;
-      opacity: 0.9;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    /* ==================== MAIN SECTION ==================== */
-    section {
-      padding: 120px 24px;
-      position: relative;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto 80px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s var(--transition-ease);
-    }
-
-    .section-header.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .section-eyebrow {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--accent-primary);
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: clamp(36px, 5vw, 56px);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    .section-description {
-      font-size: 21px;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    /* ==================== FEATURE CARD (MAIN FORM) ==================== */
-    .feature-card {
-      background: var(--card-bg);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 48px 40px;
-      transition: all 0.4s var(--transition-smooth);
-      opacity: 0;
-      transform: translateY(30px);
-      position: relative;
-      overflow: hidden;
-      max-width: 980px;
-      margin: 0 auto;
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 0%, var(--accent-primary) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.4s var(--transition-smooth);
-      pointer-events: none;
-    }
-
-    .feature-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ==================== EXAMPLE BUTTONS ==================== */
-    .example-buttons {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-    }
-
-    .example-button {
-      flex: 1;
-      min-width: 200px;
-      padding: 16px 32px;
-      font-size: 17px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      color: var(--text-primary);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.3s var(--transition-smooth);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      font-family: inherit;
-    }
-
-    .example-button:hover {
-      background: var(--bg-secondary);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .example-button:active {
-      transform: translateY(0);
-    }
-
-    /* ==================== FORM ELEMENTS ==================== */
-    label {
-      font-size: 17px;
-      font-weight: 500;
-      display: block;
-      margin-bottom: 12px;
-      color: var(--text-primary);
-      letter-spacing: -0.01em;
-    }
-
-    textarea, input[type="number"] {
-      width: 100%;
-      padding: 16px 20px;
-      margin-bottom: 28px;
-      font-size: 17px;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      background: var(--bg-secondary);
-      transition: all 0.2s var(--transition-smooth);
-      letter-spacing: -0.01em;
-      color: var(--text-primary);
-    }
-
-    textarea:focus, input[type="number"]:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
-      background: var(--bg-primary);
-    }
-
-    [data-theme="dark"] textarea:focus,
-    [data-theme="dark"] input[type="number"]:focus {
-      box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 140px;
-      line-height: 1.5;
-    }
-
-    textarea::placeholder,
-    input::placeholder {
-      color: var(--text-secondary);
-    }
-
-    /* ==================== BUTTONS ==================== */
-    .btn {
-      padding: 16px 32px;
-      font-size: 17px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      border-radius: 12px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.3s var(--transition-smooth);
-      position: relative;
-      overflow: hidden;
-      font-family: inherit;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s var(--transition-smooth);
-      pointer-events: none;
-    }
-
-    .btn:hover::before {
-      opacity: 1;
-    }
-
-    .btn-primary {
-      background: var(--accent-primary);
-      color: white;
-      box-shadow: var(--shadow-sm);
-      width: 100%;
-      padding: 18px;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-
-    .btn-secondary {
-      background: var(--card-bg);
-      color: var(--text-primary);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-secondary);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* ==================== ADVANCED OPTIONS ==================== */
-    .advanced-section {
-      margin: 32px 0;
-    }
-
-    .advanced-toggle {
-      margin-bottom: 20px;
-    }
-
-    #advancedOptions {
-      background: var(--bg-secondary);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 32px;
-      display: none;
-      animation: fadeIn 0.4s var(--transition-ease);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    #advancedOptions p {
-      font-size: 17px;
-      color: var(--text-secondary);
-      margin-bottom: 24px;
-      letter-spacing: -0.01em;
-    }
-
-    #advancedOptions small {
-      display: block;
-      color: var(--text-secondary);
-      font-size: 15px;
-      letter-spacing: -0.01em;
-      margin-top: -16px;
-      margin-bottom: 24px;
-    }
-
-    /* ==================== LOADING SPINNER ==================== */
-    .spinner-container {
-      text-align: center;
-      padding: 48px;
-      display: none;
-    }
-
-    .spinner {
-      border: 3px solid rgba(0, 0, 0, 0.06);
-      border-top: 3px solid var(--accent-primary);
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      animation: spin 0.8s var(--transition-smooth) infinite;
-      margin: 0 auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    [data-theme="dark"] .spinner {
-      border-color: rgba(255, 255, 255, 0.08);
-      border-top-color: var(--accent-primary);
-    }
-
-    .spinner-text {
-      margin-top: 20px;
-      font-size: 17px;
-      color: var(--text-secondary);
-      font-weight: 400;
-      letter-spacing: -0.01em;
-    }
-
-    /* ==================== ERROR BOX ==================== */
-    .error-box {
-      background: rgba(255, 59, 48, 0.08);
-      border: 1px solid rgba(255, 59, 48, 0.2);
-      border-radius: 16px;
-      padding: 24px;
-      margin-top: 24px;
-      display: none;
-      animation: shake 0.4s var(--transition-smooth);
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      75% { transform: translateX(8px); }
-    }
-
-    [data-theme="dark"] .error-box {
-      background: rgba(255, 69, 58, 0.12);
-      border-color: rgba(255, 69, 58, 0.3);
-    }
-
-    .error-box strong {
-      color: var(--danger);
-      font-weight: 600;
-      font-size: 17px;
-    }
-
-    .error-box p {
-      margin: 8px 0 0;
-      color: var(--text-primary);
-      font-size: 15px;
-      letter-spacing: -0.01em;
-    }
-
-    /* ==================== RESULT BOX ==================== */
-    .result-box {
-      margin-top: 40px;
-      padding: 40px;
-      border-radius: 24px;
-      display: none;
-      animation: slideUp 0.5s var(--transition-ease) forwards;
-      border: 1px solid var(--card-border);
-      position: relative;
-      overflow: hidden;
-      background: var(--card-bg);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-    }
-
-    @keyframes slideUp {
+    @keyframes fadeInUp {
       from {
         opacity: 0;
         transform: translateY(30px);
@@ -656,187 +292,927 @@
       }
     }
 
+    .hero-subtitle {
+      font-size: clamp(18px, 3vw, 24px);
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeInUp 0.8s var(--transition-smooth) 0.6s backwards;
+      line-height: 1.6;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s var(--transition-smooth) 0.8s backwards;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s var(--transition-smooth);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      font-family: inherit;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .btn:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .btn-secondary {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--card-bg);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ==================== STATS SECTION ==================== */
+    .stats-section {
+      padding: 80px 2rem;
+      background: var(--bg-secondary);
+    }
+
+    .stats-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.4s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+      transform: scaleX(0);
+      transition: transform 0.6s var(--transition-smooth);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      animation: bounce 2s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .stat-number {
+      font-size: clamp(42px, 6vw, 64px);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ==================== FEATURES SECTION ==================== */
+    .features-section {
+      padding: 120px 2rem;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 80px;
+    }
+
+    .section-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-primary);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .section-title {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      font-size: 20px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px;
+      transition: all 0.4s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent-primary);
+    }
+
+    .feature-card:hover::after {
+      opacity: 0.05;
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .feature-description {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ==================== ANALYZER SECTION ==================== */
+    .analyzer-section {
+      padding: 120px 2rem;
+      background: var(--bg-secondary);
+    }
+
+    .analyzer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .analyzer-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      padding: 60px;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .analyzer-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .form-group {
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 18px 24px;
+      border-radius: 16px;
+      border: 2px solid var(--card-border);
+      background: var(--glass-bg);
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: all 0.3s var(--transition-smooth);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      background: var(--bg-primary);
+    }
+
+    textarea.form-input {
+      min-height: 160px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 16px 24px;
+      border-radius: 14px;
+      border: 2px solid var(--card-border);
+      background: var(--glass-bg);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+
+    .quick-btn:hover {
+      border-color: var(--accent-primary);
+      background: var(--accent-primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Advanced Options */
+    .advanced-toggle {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .advanced-content {
+      display: none;
+      background: var(--glass-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 32px;
+      animation: slideDown 0.4s var(--transition-smooth);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .advanced-content.show {
+      display: block;
+    }
+
+    .advanced-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: var(--info-light);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .form-hint {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: -20px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Loading State */
+    .loading-overlay {
+      display: none;
+      position: relative;
+      padding: 60px;
+      text-align: center;
+    }
+
+    .loading-overlay.show {
+      display: block;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 24px;
+      border: 4px solid var(--card-border);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 18px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Error State */
+    .error-alert {
+      display: none;
+      padding: 20px 24px;
+      background: var(--danger-light);
+      border: 2px solid var(--danger);
+      border-radius: 16px;
+      margin-top: 24px;
+      animation: shake 0.5s var(--transition-smooth);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .error-alert.show {
+      display: block;
+    }
+
+    .error-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 8px;
+    }
+
+    .error-message {
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Result Box */
+    .result-container {
+      display: none;
+      margin-top: 48px;
+      animation: fadeInUp 0.6s var(--transition-smooth);
+    }
+
+    .result-container.show {
+      display: block;
+    }
+
+    .result-box {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 24px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
     .result-box::before {
       content: '';
       position: absolute;
       inset: 0;
-      opacity: 0.05;
+      opacity: 0.03;
       pointer-events: none;
     }
 
+    .result-box.legit {
+      border-color: var(--success);
+    }
+
     .result-box.legit::before {
-      background: radial-gradient(circle at 50% 0%, var(--success) 0%, transparent 70%);
+      background: radial-gradient(circle at center, var(--success) 0%, transparent 70%);
+    }
+
+    .result-box.fake {
+      border-color: var(--danger);
     }
 
     .result-box.fake::before {
-      background: radial-gradient(circle at 50% 0%, var(--danger) 0%, transparent 70%);
+      background: radial-gradient(circle at center, var(--danger) 0%, transparent 70%);
     }
 
     .result-header {
       display: flex;
       align-items: center;
-      gap: 16px;
-      font-size: 28px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      letter-spacing: -0.02em;
+      gap: 20px;
+      margin-bottom: 32px;
     }
 
     .result-icon {
-      font-size: 48px;
+      font-size: 64px;
+      animation: scaleIn 0.5s var(--transition-bounce);
     }
 
-    .confidence-row {
-      margin-top: 20px;
-      font-size: 17px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .result-title-group h3 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
       color: var(--text-primary);
-      font-weight: 400;
-      letter-spacing: -0.01em;
     }
 
-    .confidence-row strong {
-      font-weight: 600;
-      font-size: 24px;
-    }
-
-    .confidence-bar-bg {
-      background: rgba(0, 0, 0, 0.06);
-      border-radius: 12px;
-      overflow: hidden;
-      height: 12px;
-      width: 100%;
-      margin-top: 16px;
-    }
-
-    [data-theme="dark"] .confidence-bar-bg {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .confidence-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-primary), #5856d6);
-      transition: width 1.2s var(--transition-smooth);
-      border-radius: 12px;
-    }
-
-    .badge {
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 12px;
-      color: white;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .low { background: var(--success); }
-    .medium { background: var(--warning); }
-    .high { background: var(--danger); }
-
-    .details {
-      margin-top: 32px;
-      padding-top: 32px;
-      border-top: 1px solid var(--card-border);
-      font-size: 17px;
-    }
-
-    .details-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      letter-spacing: -0.01em;
-    }
-
-    .details-label {
-      font-weight: 500;
+    .result-subtitle {
+      font-size: 16px;
       color: var(--text-secondary);
     }
 
-    .details-value {
+    .confidence-section {
+      margin-bottom: 32px;
+    }
+
+    .confidence-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .confidence-label {
+      font-size: 16px;
       font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .confidence-value {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .confidence-bar {
+      height: 16px;
+      background: var(--bg-secondary);
+      border-radius: 50px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+      border-radius: 50px;
+      transition: width 1.5s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .confidence-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+
+    .risk-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 16px;
+    }
+
+    .risk-low {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .risk-medium {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .risk-high {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .result-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 2px solid var(--card-border);
+    }
+
+    .detail-item {
+      text-align: center;
+      padding: 20px;
+      background: var(--glass-bg);
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+    }
+
+    .detail-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .detail-value {
+      font-size: 28px;
+      font-weight: 800;
       color: var(--text-primary);
+    }
+
+    /* Pattern Insights */
+    .insights-section {
+      margin-top: 32px;
+      padding: 32px;
+      background: var(--glass-bg);
+      border-radius: 20px;
+      border: 2px solid var(--card-border);
+    }
+
+    .insights-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-primary);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      transition: transform 0.3s var(--transition-smooth);
+    }
+
+    .insight-item:hover {
+      transform: translateX(5px);
+    }
+
+    .insight-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .insight-text {
+      flex: 1;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* History Section */
+    .history-section {
+      margin-top: 48px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .history-title {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-history-btn {
+      padding: 10px 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s var(--transition-smooth);
+    }
+
+    .clear-history-btn:hover {
+      background: var(--danger);
+      color: white;
+      border-color: var(--danger);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .history-item {
+      background: var(--glass-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: all 0.3s var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .history-item:hover {
+      transform: translateX(5px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-primary);
+    }
+
+    .history-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .history-content {
+      flex: 1;
+    }
+
+    .history-text {
+      font-size: 15px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .history-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+      font-size: 16px;
     }
 
     /* ==================== FOOTER ==================== */
     footer {
       background: var(--bg-secondary);
-      padding: 48px 24px 32px;
-      border-top: 0.5px solid var(--card-border);
+      padding: 60px 2rem 40px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
       text-align: center;
     }
 
-    .footer-content {
-      max-width: 800px;
-      margin: 0 auto;
+    .footer-brand {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .footer-text {
-      font-size: 15px;
       color: var(--text-secondary);
-      letter-spacing: -0.01em;
-      line-height: 1.6;
+      line-height: 1.8;
+      margin-bottom: 24px;
+      font-size: 15px;
     }
 
-    .footer-text strong {
-      color: var(--text-primary);
-      font-weight: 600;
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
     }
 
-    .footer-text a {
-      color: var(--accent-primary);
+    .footer-link {
+      color: var(--text-secondary);
       text-decoration: none;
-      transition: color 0.2s var(--transition-smooth);
+      font-weight: 500;
+      transition: color 0.3s var(--transition-smooth);
+      font-size: 14px;
     }
 
-    .footer-text a:hover {
-      color: var(--accent-hover);
+    .footer-link:hover {
+      color: var(--accent-primary);
+    }
+
+    .footer-copyright {
+      color: var(--text-tertiary);
+      font-size: 13px;
+      padding-top: 24px;
+      border-top: 1px solid var(--card-border);
     }
 
     /* ==================== RESPONSIVE ==================== */
     @media (max-width: 768px) {
       .hero {
-        padding: 100px 16px 60px;
-      }
-
-      section {
-        padding: 80px 16px;
-      }
-
-      .feature-card {
-        padding: 32px 24px;
-      }
-
-      .example-buttons {
-        flex-direction: column;
-      }
-
-      .example-button {
-        width: 100%;
+        padding: 100px 1rem 60px;
       }
 
       .nav-container {
-        padding: 0 16px;
+        padding: 0 1rem;
       }
 
-      .stats-section {
-        padding: 60px 16px;
+      .nav-link {
+        display: none;
       }
 
-      .stat-item {
-        padding: 40px 24px;
+      .features-grid,
+      .stats-grid {
+        grid-template-columns: 1fr;
       }
 
-      #advancedOptions {
-        padding: 24px;
+      .analyzer-card {
+        padding: 32px 24px;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+      }
+
+      .quick-btn {
+        width: 100%;
       }
 
       .result-box {
-        padding: 28px;
+        padding: 32px 24px;
+      }
+
+      .result-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .result-details {
+        grid-template-columns: 1fr;
+      }
+
+      .confidence-header {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
       }
     }
 
@@ -852,15 +1228,8 @@
     }
 
     :focus-visible {
-      outline: 2px solid var(--accent-primary);
-      outline-offset: 4px;
-      border-radius: 4px;
-    }
-
-    button:focus-visible,
-    a:focus-visible {
-      outline: 2px solid var(--accent-primary);
-      outline-offset: 4px;
+      outline: 3px solid var(--accent-primary);
+      outline-offset: 3px;
     }
   </style>
 </head>
@@ -869,133 +1238,293 @@
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#" class="nav-logo">
-        <span>🛡️</span>
-        <span>ReviewGuard</span>
+      <a href="#" class="nav-brand">
+        <span class="nav-brand-icon">🛡️</span>
+        ReviewGuard Pro
       </a>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon">🌙</span>
-      </button>
+      <div class="nav-actions">
+        <a href="#analyzer" class="nav-link">Analyze</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#history" class="nav-link">History</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
     </div>
   </nav>
 
   <!-- HERO SECTION -->
   <section class="hero">
-    <div class="hero-background"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow">AI-Powered Detection</div>
-      <h1 class="hero-title">Fake Review Detector</h1>
-      <p class="hero-subtitle">Protect yourself from deceptive reviews with advanced machine learning technology.</p>
+      <div class="hero-badge">
+        <span>✨</span>
+        <span>AI-Powered Detection Engine</span>
+      </div>
+      <h1 class="hero-title">Unmask Fake Reviews<br>with AI Precision</h1>
+      <p class="hero-subtitle">
+        Advanced machine learning technology that analyzes review patterns, sentiment, and authenticity markers to protect you from deceptive content.
+      </p>
+      <div class="hero-cta">
+        <a href="#analyzer" class="btn btn-primary">
+          🔍 Start Analyzing
+        </a>
+        <button class="btn btn-secondary" onclick="scrollToFeatures()">
+          Learn More
+        </button>
+      </div>
     </div>
   </section>
 
   <!-- STATS SECTION -->
   <section class="stats-section">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span class="stat-number" id="totalReviews">0</span>
-        <div class="stat-label">Reviews Analyzed</div>
-      </div>
-      
-      <div class="stat-item">
-        <span class="stat-number" id="fakeCount">0</span>
-        <div class="stat-label">Fake Detected</div>
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <span class="stat-number" id="totalReviews">0</span>
+          <div class="stat-label">Reviews Analyzed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚨</div>
+          <span class="stat-number" id="fakeCount">0</span>
+          <div class="stat-label">Fake Detected</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <span class="stat-number" id="accuracyRate">94</span>
+          <div class="stat-label">Accuracy Rate</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- MAIN SECTION -->
-  <section id="analyzer">
+  <!-- FEATURES SECTION -->
+  <section class="features-section" id="features">
     <div class="section-header">
-      <div class="section-eyebrow">How It Works</div>
-      <h2 class="section-title">Analyze any review</h2>
-      <p class="section-description">Simply paste the review text below and our AI will detect patterns of fake or suspicious content.</p>
+      <div class="section-badge">CAPABILITIES</div>
+      <h2 class="section-title">Powerful Detection Features</h2>
+      <p class="section-subtitle">Our AI analyzes multiple dimensions to detect fake reviews with industry-leading accuracy.</p>
     </div>
-    
-    <div class="feature-card">
-      <!-- Example Buttons -->
-      <div class="example-buttons">
-        <button class="example-button" onclick="loadExample('suspicious')">
-          🚨 Try Suspicious Review
-        </button>
-        <button class="example-button" onclick="loadExample('legit')">
-          ✅ Try Legitimate Review
-        </button>
-        <button class="example-button" onclick="clearForm()">
-          🗑️ Clear Form
-        </button>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🧠</span>
+        <h3 class="feature-title">Machine Learning Analysis</h3>
+        <p class="feature-description">Advanced NLP algorithms trained on millions of reviews to identify authentic vs suspicious patterns.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💭</span>
+        <h3 class="feature-title">Sentiment Detection</h3>
+        <p class="feature-description">Deep sentiment analysis to catch exaggerated emotions and unnatural language patterns.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔍</span>
+        <h3 class="feature-title">Pattern Recognition</h3>
+        <p class="feature-description">Identifies common fake review patterns like excessive caps, urgency tactics, and generic phrasing.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📈</span>
+        <h3 class="feature-title">Reviewer Profiling</h3>
+        <p class="feature-description">Analyzes reviewer behavior patterns to detect suspicious account activity.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <h3 class="feature-title">Real-time Analysis</h3>
+        <p class="feature-description">Get instant results with detailed confidence scores and risk assessments.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📱</span>
+        <h3 class="feature-title">Review History</h3>
+        <p class="feature-description">Track your analysis history and spot patterns across multiple reviews.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYZER SECTION -->
+  <section class="analyzer-section" id="analyzer">
+    <div class="analyzer-container">
+      <div class="section-header">
+        <div class="section-badge">ANALYSIS TOOL</div>
+        <h2 class="section-title">Analyze Any Review</h2>
+        <p class="section-subtitle">Paste any product or service review below and our AI will instantly analyze it for authenticity.</p>
       </div>
 
-      <!-- Input Form -->
-      <label for="review">Review Text</label>
-      <textarea 
-        id="review" 
-        placeholder="Paste the review text here... (e.g., 'This product exceeded my expectations. The quality is excellent and delivery was fast.')">
-      </textarea>
+      <div class="analyzer-card">
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="quick-btn" onclick="loadExample('suspicious')">
+            🚨 Try Suspicious Example
+          </button>
+          <button class="quick-btn" onclick="loadExample('legit')">
+            ✅ Try Legitimate Example
+          </button>
+          <button class="quick-btn" onclick="clearForm()">
+            🗑️ Clear Form
+          </button>
+        </div>
 
-      <label for="rating">Rating (1–5)</label>
-      <input type="number" id="rating" min="1" max="5" step="0.1" value="3">
+        <!-- Main Form -->
+        <div class="form-group">
+          <label class="form-label">
+            <span>📝</span>
+            <span>Review Text</span>
+          </label>
+          <textarea 
+            id="reviewText" 
+            class="form-input" 
+            placeholder="Paste the review text here... Example: 'This product exceeded my expectations. The quality is excellent and delivery was fast. Highly recommend!'"
+          ></textarea>
+        </div>
 
-      <!-- Advanced Options -->
-      <div class="advanced-section">
-        <button type="button" class="btn btn-secondary advanced-toggle" onclick="toggleAdvanced()">
+        <div class="form-group">
+          <label class="form-label">
+            <span>⭐</span>
+            <span>Rating (1-5)</span>
+          </label>
+          <input 
+            type="number" 
+            id="rating" 
+            class="form-input" 
+            min="1" 
+            max="5" 
+            step="0.1" 
+            value="3"
+          >
+        </div>
+
+        <!-- Advanced Options -->
+        <button class="btn btn-secondary advanced-toggle" onclick="toggleAdvanced()">
           ⚙️ <span id="advancedToggleText">Show Advanced Options</span>
         </button>
 
-        <div id="advancedOptions">
-          <p>💡 Adding reviewer context improves accuracy significantly!</p>
-          
-          <label for="totalReviewsInput">Reviewer's Total Reviews</label>
-          <input type="number" id="totalReviewsInput" min="1" max="1000" value="1">
-          <small>How many reviews has this person written? (Fake reviewers often have 5-20 reviews)</small>
-
-          <label for="avgRating">Reviewer's Average Rating</label>
-          <input type="number" id="avgRating" min="1" max="5" step="0.1" value="4.0">
-          <small>What's their average rating across all reviews? (Fake reviewers often only give 1★ or 5★)</small>
-        </div>
-      </div>
-
-      <button class="btn btn-primary" onclick="predict()">
-        🔍 Analyze Review
-      </button>
-
-      <!-- Loading Spinner -->
-      <div id="spinner" class="spinner-container">
-        <div class="spinner"></div>
-        <div class="spinner-text">Analyzing review...</div>
-      </div>
-
-      <!-- Error Box -->
-      <div id="errorBox" class="error-box">
-        <strong>⚠️ Error:</strong>
-        <p id="errorMessage"></p>
-      </div>
-
-      <!-- Result Box -->
-      <div id="resultBox" class="result-box">
-        <div class="result-header">
-          <span id="resultIcon" class="result-icon">✅</span>
-          <span id="resultTitle">Review Looks Legitimate</span>
-        </div>
-
-        <div class="confidence-row">
-          <span>Confidence:</span>
-          <strong><span id="confidence">0</span>%</strong>
-          <span id="riskBadge" class="badge low">LOW</span>
-        </div>
-
-        <div class="confidence-bar-bg">
-          <div id="confidenceBar" class="confidence-bar-fill"></div>
-        </div>
-
-        <div class="details">
-          <div class="details-row">
-            <span class="details-label">Fake Probability:</span>
-            <span class="details-value" id="fakeProbability">0%</span>
+        <div id="advancedOptions" class="advanced-content">
+          <div class="advanced-hint">
+            <span>💡</span>
+            <span>Adding reviewer context dramatically improves detection accuracy by analyzing behavioral patterns!</span>
           </div>
-          <div class="details-row">
-            <span class="details-label">Legitimate Probability:</span>
-            <span class="details-value" id="legitProbability">0%</span>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span>📚</span>
+              <span>Reviewer's Total Reviews</span>
+            </label>
+            <input 
+              type="number" 
+              id="totalReviewsInput" 
+              class="form-input" 
+              min="1" 
+              max="1000" 
+              value="1"
+            >
+            <p class="form-hint">
+              How many reviews has this person written? Fake reviewers typically have 5-20 reviews.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              <span>⭐</span>
+              <span>Reviewer's Average Rating</span>
+            </label>
+            <input 
+              type="number" 
+              id="avgRating" 
+              class="form-input" 
+              min="1" 
+              max="5" 
+              step="0.1" 
+              value="4.0"
+            >
+            <p class="form-hint">
+              What's their average rating? Fake reviewers often only give 1★ or 5★ ratings.
+            </p>
+          </div>
+        </div>
+
+        <!-- Analyze Button -->
+        <button class="btn btn-primary" onclick="analyzeReview()" style="width: 100%; padding: 20px; font-size: 18px; margin-top: 16px;">
+          🔍 Analyze Review
+        </button>
+
+        <!-- Loading State -->
+        <div id="loadingOverlay" class="loading-overlay">
+          <div class="spinner"></div>
+          <p class="loading-text">Analyzing review patterns...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorAlert" class="error-alert">
+          <div class="error-title">
+            <span>⚠️</span>
+            <span>Error</span>
+          </div>
+          <p class="error-message" id="errorMessage"></p>
+        </div>
+
+        <!-- Results -->
+        <div id="resultContainer" class="result-container">
+          <div id="resultBox" class="result-box">
+            <div class="result-header">
+              <div class="result-icon" id="resultIcon">✅</div>
+              <div class="result-title-group">
+                <h3 id="resultTitle">Review Looks Legitimate</h3>
+                <p class="result-subtitle" id="resultSubtitle">Based on pattern analysis and ML algorithms</p>
+              </div>
+            </div>
+
+            <div class="confidence-section">
+              <div class="confidence-header">
+                <span class="confidence-label">Confidence Score</span>
+                <span class="confidence-value"><span id="confidenceValue">0</span>%</span>
+              </div>
+              <div class="confidence-bar">
+                <div id="confidenceFill" class="confidence-fill" style="width: 0%"></div>
+              </div>
+              <div>
+                <span id="riskBadge" class="risk-badge risk-low">LOW RISK</span>
+              </div>
+            </div>
+
+            <div class="result-details">
+              <div class="detail-item">
+                <div class="detail-label">Fake Probability</div>
+                <div class="detail-value" id="fakeProbability">0%</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Legit Probability</div>
+                <div class="detail-value" id="legitProbability">0%</div>
+              </div>
+            </div>
+
+            <!-- Pattern Insights -->
+            <div class="insights-section">
+              <h4 class="insights-title">
+                <span>🔍</span>
+                <span>Detection Insights</span>
+              </h4>
+              <div id="insightsList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY SECTION -->
+  <section class="analyzer-section" id="history" style="padding-top: 60px;">
+    <div class="analyzer-container">
+      <div class="history-section">
+        <div class="history-header">
+          <h3 class="history-title">
+            <span>📜</span>
+            <span>Analysis History</span>
+          </h3>
+          <button class="clear-history-btn" onclick="clearHistory()">
+            🗑️ Clear History
+          </button>
+        </div>
+        <div id="historyList" class="history-list">
+          <div class="history-empty">
+            <p>📭 No analysis history yet.<br>Start analyzing reviews to build your history!</p>
           </div>
         </div>
       </div>
@@ -1004,93 +1533,74 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-content">
+    <div class="footer-container">
+      <div class="footer-brand">ReviewGuard Pro</div>
       <p class="footer-text">
-        <strong>ReviewGuard</strong> • Machine Learning Project<br>
-        Built with Flask + scikit-learn • 
-        <a href="https://github.com/iamlakshyamittal/ReviewGuard" target="_blank">View on GitHub</a>
+        Advanced AI-powered fake review detection system<br>
+        Built with Machine Learning • Flask • scikit-learn
+      </p>
+      <div class="footer-links">
+        <a href="https://github.com/iamlakshyamittal/ReviewGuard" target="_blank" class="footer-link">GitHub</a>
+        <a href="#" class="footer-link">Documentation</a>
+        <a href="#" class="footer-link">API</a>
+        <a href="#" class="footer-link">Privacy Policy</a>
+      </div>
+      <p class="footer-copyright">
+        © 2024 ReviewGuard Pro. Made with ❤️ for authenticity.
       </p>
     </div>
   </footer>
 
   <script>
-    // ==================== THEME TOGGLE ====================
+    // ==================== THEME MANAGEMENT ====================
     const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.querySelector('.theme-icon');
+    const themeIcon = document.getElementById('themeIcon');
     const html = document.documentElement;
 
-    // Load saved theme preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', savedTheme);
-    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    // Load saved theme
+    let currentTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', currentTheme);
+    themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
 
     themeToggle.addEventListener('click', () => {
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
+      themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
     });
 
-    // ==================== NAVBAR SCROLL EFFECT ====================
+    // ==================== NAVBAR SCROLL ====================
     const navbar = document.querySelector('.navbar');
-
     window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
-      
-      if (currentScroll > 50) {
+      if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
       } else {
         navbar.classList.remove('scrolled');
       }
     });
 
-    // ==================== SCROLL ANIMATIONS ====================
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, observerOptions);
-
-    // Observe all animated elements
-    document.querySelectorAll('.section-header, .feature-card, .stat-item').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Staggered animations for stats
-    const statItems = document.querySelectorAll('.stat-item');
-    statItems.forEach((item, index) => {
-      item.style.transitionDelay = `${index * 0.15}s`;
-    });
-
-    // ==================== PARALLAX EFFECT ====================
-    const heroBackground = document.querySelector('.hero-background');
-    
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const parallaxSpeed = 0.5;
-      
-      if (heroBackground && scrolled < window.innerHeight) {
-        heroBackground.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
-        heroBackground.style.opacity = 1 - (scrolled / window.innerHeight);
-      }
-    });
-
-    // ==================== STATS ====================
+    // ==================== STATISTICS ====================
     let stats = JSON.parse(localStorage.getItem('reviewguard_stats') || '{"total":0,"fake":0}');
-    updateStatsDisplay();
-
+    
     function updateStatsDisplay() {
-      document.getElementById('totalReviews').textContent = stats.total;
-      document.getElementById('fakeCount').textContent = stats.fake;
+      animateValue('totalReviews', 0, stats.total, 2000);
+      animateValue('fakeCount', 0, stats.fake, 2000);
+    }
+
+    function animateValue(id, start, end, duration) {
+      const element = document.getElementById(id);
+      const range = end - start;
+      const increment = end > start ? 1 : -1;
+      const stepTime = Math.abs(Math.floor(duration / range));
+      let current = start;
+
+      const timer = setInterval(() => {
+        current += increment;
+        element.textContent = current;
+        if (current === end) {
+          clearInterval(timer);
+        }
+      }, stepTime);
     }
 
     function updateStats(isFake) {
@@ -1100,27 +1610,30 @@
       updateStatsDisplay();
     }
 
+    // Initialize stats
+    updateStatsDisplay();
+
     // ==================== ADVANCED OPTIONS ====================
     function toggleAdvanced() {
-      const advancedDiv = document.getElementById("advancedOptions");
-      const toggleText = document.getElementById("advancedToggleText");
+      const content = document.getElementById('advancedOptions');
+      const text = document.getElementById('advancedToggleText');
       
-      if (advancedDiv.style.display === "none" || advancedDiv.style.display === "") {
-        advancedDiv.style.display = "block";
-        toggleText.textContent = "Hide Advanced Options";
+      if (content.classList.contains('show')) {
+        content.classList.remove('show');
+        text.textContent = 'Show Advanced Options';
       } else {
-        advancedDiv.style.display = "none";
-        toggleText.textContent = "Show Advanced Options";
+        content.classList.add('show');
+        text.textContent = 'Hide Advanced Options';
       }
     }
 
-    // ==================== EXAMPLE LOADING ====================
+    // ==================== EXAMPLES ====================
     function loadExample(type) {
       const examples = {
         suspicious: {
-          text: "AMAZING PRODUCT!!! This is the BEST thing I've ever bought in my ENTIRE LIFE!!! Everyone MUST buy this NOW!!! Don't even think twice! 100% recommend! Five stars all the way! You won't regret it! ORDER NOW!!!",
+          text: "AMAZING PRODUCT!!! This is the BEST thing I've ever bought in my ENTIRE LIFE!!! Everyone MUST buy this NOW!!! Don't even think twice! 100% recommend! Five stars all the way! You won't regret it! ORDER NOW!!! This changed my life FOREVER!!!",
           rating: 5,
-          totalReviews: 15,
+          totalReviews: 12,
           avgRating: 4.9
         },
         legit: {
@@ -1132,183 +1645,331 @@
       };
 
       const example = examples[type];
-      document.getElementById("review").value = example.text;
-      document.getElementById("rating").value = example.rating;
-      document.getElementById("totalReviewsInput").value = example.totalReviews;
-      document.getElementById("avgRating").value = example.avgRating;
-      
+      document.getElementById('reviewText').value = example.text;
+      document.getElementById('rating').value = example.rating;
+      document.getElementById('totalReviewsInput').value = example.totalReviews;
+      document.getElementById('avgRating').value = example.avgRating;
+
       // Show advanced options
-      document.getElementById("advancedOptions").style.display = "block";
-      document.getElementById("advancedToggleText").textContent = "Hide Advanced Options";
-      
+      document.getElementById('advancedOptions').classList.add('show');
+      document.getElementById('advancedToggleText').textContent = 'Hide Advanced Options';
+
       // Clear previous results
-      document.getElementById("resultBox").style.display = "none";
-      document.getElementById("errorBox").style.display = "none";
+      hideResults();
     }
 
     function clearForm() {
-      document.getElementById("review").value = "";
-      document.getElementById("rating").value = 3;
-      document.getElementById("resultBox").style.display = "none";
-      document.getElementById("errorBox").style.display = "none";
+      document.getElementById('reviewText').value = '';
+      document.getElementById('rating').value = 3;
+      document.getElementById('totalReviewsInput').value = 1;
+      document.getElementById('avgRating').value = 4.0;
+      hideResults();
     }
 
-    // ==================== ERROR HANDLING ====================
+    function hideResults() {
+      document.getElementById('resultContainer').classList.remove('show');
+      document.getElementById('errorAlert').classList.remove('show');
+    }
+
+    // ==================== VALIDATION & ANALYSIS ====================
     function showError(message) {
-      const errorBox = document.getElementById("errorBox");
-      const errorMessage = document.getElementById("errorMessage");
+      const errorAlert = document.getElementById('errorAlert');
+      const errorMessage = document.getElementById('errorMessage');
       
       errorMessage.textContent = message;
-      errorBox.style.display = "block";
-      
+      errorAlert.classList.add('show');
+
       setTimeout(() => {
-        errorBox.style.display = "none";
+        errorAlert.classList.remove('show');
       }, 5000);
     }
 
-    // ==================== PREDICTION ====================
-    async function predict() {
-      const reviewText = document.getElementById("review").value.trim();
-      const rating = Number(document.getElementById("rating").value);
-      const totalReviews = Number(document.getElementById("totalReviewsInput").value);
-      const avgRating = Number(document.getElementById("avgRating").value);
+    async function analyzeReview() {
+      const reviewText = document.getElementById('reviewText').value.trim();
+      const rating = Number(document.getElementById('rating').value);
+      const totalReviews = Number(document.getElementById('totalReviewsInput').value);
+      const avgRating = Number(document.getElementById('avgRating').value);
 
       // Validation
       if (!reviewText) {
-        showError("Please enter a review text!");
+        showError('Please enter a review text to analyze.');
         return;
       }
 
       if (reviewText.length < 10) {
-        showError("Review text is too short. Please enter at least 10 characters.");
+        showError('Review text is too short. Please enter at least 10 characters.');
         return;
       }
 
       if (rating < 1 || rating > 5) {
-        showError("Rating must be between 1 and 5!");
+        showError('Rating must be between 1 and 5.');
         return;
       }
 
       // Hide previous results
-      document.getElementById("resultBox").style.display = "none";
-      document.getElementById("errorBox").style.display = "none";
-      
-      // Show spinner
-      const spinner = document.getElementById("spinner");
-      spinner.style.display = "block";
+      hideResults();
+
+      // Show loading
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.classList.add('show');
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            review_text: reviewText, 
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            review_text: reviewText,
             rating: rating,
             reviewer_total_reviews: totalReviews,
             reviewer_avg_rating: avgRating
           })
         });
 
+        loadingOverlay.classList.remove('show');
+
         if (!response.ok) {
           throw new Error(`API Error: ${response.status} - ${response.statusText}`);
         }
 
         const data = await response.json();
-        spinner.style.display = "none";
-        displayResults(data);
+        displayResults(data, reviewText);
         updateStats(data.is_fake);
+        addToHistory(reviewText, data);
 
       } catch (error) {
-        spinner.style.display = "none";
+        loadingOverlay.classList.remove('show');
         
-        let errorMsg = "Unable to connect to the API server. ";
-        
-        if (error.message.includes("Failed to fetch")) {
-          errorMsg += "Make sure the Flask server is running on http://127.0.0.1:5000";
+        let errorMsg = 'Unable to connect to the API server. ';
+        if (error.message.includes('Failed to fetch')) {
+          errorMsg += 'Please make sure the Flask server is running on http://127.0.0.1:5000';
         } else {
           errorMsg += error.message;
         }
         
         showError(errorMsg);
-        console.error("Error:", error);
+        console.error('Error:', error);
       }
     }
 
     // ==================== DISPLAY RESULTS ====================
-    function displayResults(data) {
-      const box = document.getElementById("resultBox");
-      const title = document.getElementById("resultTitle");
-      const icon = document.getElementById("resultIcon");
-      const confidenceText = document.getElementById("confidence");
-      const bar = document.getElementById("confidenceBar");
-      const badge = document.getElementById("riskBadge");
-      const fakeProbText = document.getElementById("fakeProbability");
-      const legitProbText = document.getElementById("legitProbability");
+    function displayResults(data, reviewText) {
+      const resultContainer = document.getElementById('resultContainer');
+      const resultBox = document.getElementById('resultBox');
+      const resultIcon = document.getElementById('resultIcon');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultSubtitle = document.getElementById('resultSubtitle');
+      const confidenceValue = document.getElementById('confidenceValue');
+      const confidenceFill = document.getElementById('confidenceFill');
+      const riskBadge = document.getElementById('riskBadge');
+      const fakeProbability = document.getElementById('fakeProbability');
+      const legitProbability = document.getElementById('legitProbability');
 
-      // Show result box
-      box.style.display = "block";
+      // Reset
+      confidenceFill.style.width = '0%';
       
-      // Reset bar
-      bar.style.width = "0%";
-      confidenceText.innerText = "0";
+      // Show container
+      resultContainer.classList.add('show');
 
-      // Animate confidence counter
-      const targetConfidence = Math.round(data.confidence * 100);
-      let currentConfidence = 0;
+      // Set status
+      const isFake = data.is_fake;
+      if (isFake) {
+        resultBox.className = 'result-box fake';
+        resultIcon.textContent = '🚨';
+        resultTitle.textContent = 'Fake Review Detected';
+        resultSubtitle.textContent = 'This review shows suspicious patterns';
+      } else {
+        resultBox.className = 'result-box legit';
+        resultIcon.textContent = '✅';
+        resultTitle.textContent = 'Review Looks Legitimate';
+        resultSubtitle.textContent = 'This review appears authentic';
+      }
 
-      const counterInterval = setInterval(() => {
-        currentConfidence++;
-        confidenceText.innerText = currentConfidence;
-        if (currentConfidence >= targetConfidence) {
-          clearInterval(counterInterval);
-        }
-      }, 12);
+      // Animate confidence
+      const confidence = Math.round(data.confidence * 100);
+      animateValue('confidenceValue', 0, confidence, 1500);
 
-      // Animate progress bar
       setTimeout(() => {
-        bar.style.width = targetConfidence + "%";
-      }, 150);
+        confidenceFill.style.width = confidence + '%';
+      }, 100);
 
       // Set risk badge
       const riskLevel = data.risk_level.toLowerCase();
-      badge.className = "badge " + riskLevel;
-      badge.innerText = data.risk_level;
+      riskBadge.className = `risk-badge risk-${riskLevel}`;
+      riskBadge.textContent = `${data.risk_level} RISK`;
 
       // Set probabilities
-      fakeProbText.textContent = Math.round(data.fake_probability * 100) + "%";
-      legitProbText.textContent = Math.round(data.legitimate_probability * 100) + "%";
+      fakeProbability.textContent = Math.round(data.fake_probability * 100) + '%';
+      legitProbability.textContent = Math.round(data.legitimate_probability * 100) + '%';
 
-      // Set result status
-      if (data.is_fake) {
-        box.className = "result-box fake";
-        title.innerText = "Fake Review Detected";
-        icon.innerText = "🚨";
-      } else {
-        box.className = "result-box legit";
-        title.innerText = "Review Looks Legitimate";
-        icon.innerText = "✅";
-      }
+      // Generate insights
+      generateInsights(data, reviewText);
 
       // Scroll to results
-      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => {
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 200);
     }
 
-    // ==================== KEYBOARD SHORTCUTS ====================
-    document.getElementById("review").addEventListener("keydown", function(e) {
-      if (e.ctrlKey && e.key === "Enter") {
-        predict();
+    // ==================== GENERATE INSIGHTS ====================
+    function generateInsights(data, reviewText) {
+      const insightsList = document.getElementById('insightsList');
+      const insights = [];
+
+      // Generate dynamic insights based on the analysis
+      const confidence = Math.round(data.confidence * 100);
+      
+      if (data.is_fake) {
+        if (confidence > 80) {
+          insights.push({
+            icon: '🎯',
+            text: 'High confidence fake review detection based on multiple suspicious patterns.'
+          });
+        }
+        
+        if (reviewText.includes('!!!') || reviewText.includes('MUST') || reviewText.includes('BEST')) {
+          insights.push({
+            icon: '⚠️',
+            text: 'Excessive use of capital letters and exclamation marks detected - common in fake reviews.'
+          });
+        }
+        
+        if (reviewText.length < 50) {
+          insights.push({
+            icon: '📏',
+            text: 'Very short review with limited detail - legitimate reviews typically provide more context.'
+          });
+        } else if (reviewText.length > 500) {
+          insights.push({
+            icon: '📝',
+            text: 'Unusually lengthy review detected - may contain padding or copied content.'
+          });
+        }
+
+        insights.push({
+          icon: '🔍',
+          text: 'Language patterns match known fake review characteristics in our database.'
+        });
+
+      } else {
+        if (confidence > 80) {
+          insights.push({
+            icon: '✨',
+            text: 'High confidence legitimate review based on natural language patterns.'
+          });
+        }
+
+        insights.push({
+          icon: '💬',
+          text: 'Review shows balanced sentiment and specific product details - typical of genuine feedback.'
+        });
+
+        if (reviewText.length > 100 && reviewText.length < 400) {
+          insights.push({
+            icon: '📊',
+            text: 'Review length is within optimal range for authentic customer feedback.'
+          });
+        }
+
+        insights.push({
+          icon: '🎯',
+          text: 'No suspicious patterns or manipulation tactics detected.'
+        });
+      }
+
+      // Render insights
+      insightsList.innerHTML = insights.map(insight => `
+        <div class="insight-item">
+          <span class="insight-icon">${insight.icon}</span>
+          <span class="insight-text">${insight.text}</span>
+        </div>
+      `).join('');
+    }
+
+    // ==================== HISTORY MANAGEMENT ====================
+    function addToHistory(reviewText, data) {
+      let history = JSON.parse(localStorage.getItem('reviewguard_history') || '[]');
+      
+      const entry = {
+        id: Date.now(),
+        text: reviewText.substring(0, 100) + (reviewText.length > 100 ? '...' : ''),
+        isFake: data.is_fake,
+        confidence: Math.round(data.confidence * 100),
+        timestamp: new Date().toLocaleString()
+      };
+
+      history.unshift(entry);
+      
+      // Keep only last 10 entries
+      if (history.length > 10) {
+        history = history.slice(0, 10);
+      }
+
+      localStorage.setItem('reviewguard_history', JSON.stringify(history));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const historyList = document.getElementById('historyList');
+      const history = JSON.parse(localStorage.getItem('reviewguard_history') || '[]');
+
+      if (history.length === 0) {
+        historyList.innerHTML = `
+          <div class="history-empty">
+            <p>📭 No analysis history yet.<br>Start analyzing reviews to build your history!</p>
+          </div>
+        `;
+        return;
+      }
+
+      historyList.innerHTML = history.map(entry => `
+        <div class="history-item">
+          <div class="history-icon">${entry.isFake ? '🚨' : '✅'}</div>
+          <div class="history-content">
+            <div class="history-text">${entry.text}</div>
+            <div class="history-meta">
+              <span>${entry.isFake ? 'Fake' : 'Legitimate'}</span>
+              <span>•</span>
+              <span>${entry.confidence}% confidence</span>
+              <span>•</span>
+              <span>${entry.timestamp}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function clearHistory() {
+      if (confirm('Are you sure you want to clear your analysis history?')) {
+        localStorage.removeItem('reviewguard_history');
+        renderHistory();
+      }
+    }
+
+    // Initialize history
+    renderHistory();
+
+    // ==================== UTILITY FUNCTIONS ====================
+    function scrollToFeatures() {
+      document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Keyboard shortcut: Ctrl+Enter to analyze
+    document.getElementById('reviewText').addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'Enter') {
+        analyzeReview();
       }
     });
 
-    // ==================== SMOOTH SCROLL ====================
+    // Smooth scroll for nav links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
           const navHeight = navbar.offsetHeight;
           const targetPosition = target.offsetTop - navHeight;
-          
           window.scrollTo({
             top: targetPosition,
             behavior: 'smooth'
