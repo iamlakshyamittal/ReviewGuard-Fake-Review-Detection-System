@@ -3,15 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReviewGuard Ultra – AI-Powered Review Analysis Platform</title>
+  <title>ReviewGuard – AI-Powered Review Analysis Platform</title>
   
-  <!-- Chart.js for visualizations -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+  <!-- Chart.js - Lazy loaded when needed -->
+  <script>
+    let chartJsLoaded = false;
+    function loadChartJS() {
+      return new Promise((resolve, reject) => {
+        if (chartJsLoaded) {
+          resolve();
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js';
+        script.onload = () => {
+          chartJsLoaded = true;
+          resolve();
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+  </script>
   
   <style>
     /* ==================== CSS VARIABLES ==================== */
     :root {
-      /* Light Mode Colors */
       --bg-primary: #ffffff;
       --bg-secondary: #f8f9fa;
       --bg-tertiary: #e9ecef;
@@ -39,8 +56,6 @@
       --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
       --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
       --shadow-glow: 0 0 60px rgba(102, 126, 234, 0.4);
-      
-      /* Transitions */
       --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
       --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
       --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -99,7 +114,6 @@
       position: relative;
     }
 
-    /* Animated Background with Particles */
     body::before {
       content: '';
       position: fixed;
@@ -111,6 +125,7 @@
       animation: gradientShift 20s ease infinite;
       pointer-events: none;
       z-index: -1;
+      will-change: transform, opacity;
     }
 
     [data-theme="dark"] body::before {
@@ -157,14 +172,8 @@
     }
 
     @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(100px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      from { opacity: 0; transform: translateX(100px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     .toast-icon {
@@ -254,6 +263,7 @@
     .nav-brand-icon {
       font-size: 32px;
       animation: float 3s ease-in-out infinite;
+      will-change: transform;
     }
 
     @keyframes float {
@@ -412,14 +422,8 @@
     }
 
     @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hero-title {
@@ -436,14 +440,8 @@
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hero-subtitle {
@@ -651,7 +649,6 @@
       line-height: 1.4;
     }
 
-    /* Quick Actions */
     .quick-actions {
       display: flex;
       gap: 12px;
@@ -686,7 +683,6 @@
       box-shadow: var(--shadow-md);
     }
 
-    /* Advanced Options */
     .advanced-content {
       display: none;
       background: var(--glass-bg);
@@ -698,14 +694,8 @@
     }
 
     @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .advanced-content.show {
@@ -725,7 +715,6 @@
       line-height: 1.5;
     }
 
-    /* Loading State */
     .loading-overlay {
       display: none;
       position: relative;
@@ -757,7 +746,6 @@
       font-weight: 500;
     }
 
-    /* Result Box */
     .result-container {
       display: none;
       margin-top: 40px;
@@ -814,14 +802,8 @@
     }
 
     @keyframes scaleIn {
-      from {
-        transform: scale(0);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .result-title-group h3 {
@@ -877,6 +859,7 @@
       transition: width 1.5s var(--transition-smooth);
       position: relative;
       overflow: hidden;
+      will-change: width;
     }
 
     .confidence-fill::after {
@@ -955,7 +938,6 @@
       color: var(--text-primary);
     }
 
-    /* Insights Section */
     .insights-section {
       margin-top: 28px;
       padding: 28px;
@@ -1000,7 +982,6 @@
       font-size: 14px;
     }
 
-    /* Keyword Highlighting */
     .keyword-section {
       margin-top: 28px;
       padding: 28px;
@@ -1045,104 +1026,11 @@
       border-color: var(--success);
     }
 
-    /* Export Actions */
     .export-section {
       margin-top: 28px;
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-    }
-
-    /* ==================== BATCH ANALYSIS ==================== */
-    .batch-container {
-      display: grid;
-      gap: 24px;
-    }
-
-    .batch-input-area {
-      background: var(--card-bg);
-      border: 2px dashed var(--card-border);
-      border-radius: 18px;
-      padding: 40px;
-      text-align: center;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-
-    .batch-input-area:hover {
-      border-color: var(--accent-primary);
-      background: var(--glass-bg);
-    }
-
-    .batch-input-area.dragover {
-      border-color: var(--accent-primary);
-      background: var(--accent-primary);
-      color: white;
-    }
-
-    .batch-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
-    }
-
-    .batch-text {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .batch-hint {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-
-    .batch-reviews-list {
-      display: grid;
-      gap: 16px;
-    }
-
-    .batch-review-item {
-      background: var(--glass-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .batch-review-text {
-      flex: 1;
-      font-size: 14px;
-      color: var(--text-primary);
-      line-clamp: 2;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      display: -webkit-box;
-    }
-
-    .batch-review-status {
-      font-size: 24px;
-      flex-shrink: 0;
-    }
-
-    .batch-remove {
-      background: var(--danger-light);
-      color: var(--danger);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-
-    .batch-remove:hover {
-      background: var(--danger);
-      color: white;
     }
 
     /* ==================== DASHBOARD/ANALYTICS ==================== */
@@ -1335,13 +1223,6 @@
       color: var(--accent-primary);
     }
 
-    .footer-copyright {
-      color: var(--text-tertiary);
-      font-size: 12px;
-      padding-top: 20px;
-      border-top: 1px solid var(--card-border);
-    }
-
     /* ==================== RESPONSIVE ==================== */
     @media (max-width: 768px) {
       .hero {
@@ -1432,14 +1313,8 @@
 
     /* ==================== CONFETTI ANIMATION ==================== */
     @keyframes confetti-fall {
-      0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
 
     .confetti {
@@ -1452,9 +1327,7 @@
 
     /* ==================== ACCESSIBILITY ==================== */
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
@@ -1469,21 +1342,18 @@
 </head>
 <body>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#" class="nav-brand" onclick="scrollToTop()">
+      <a href="#" class="nav-brand" onclick="App.utils.scrollToTop()">
         <span class="nav-brand-icon">🛡️</span>
-        ReviewGuard Ultra
+        ReviewGuard
       </a>
       <div class="nav-menu">
-        <button class="nav-link" onclick="switchTab('single')">Single</button>
-        <button class="nav-link" onclick="switchTab('batch')">Batch</button>
-        <button class="nav-link" onclick="switchTab('analytics')">Analytics</button>
-        <button class="nav-link" onclick="switchTab('history')">History</button>
+        <button class="nav-link" onclick="App.tabs.switch('analyze')">Analyze</button>
+        <button class="nav-link" onclick="App.tabs.switch('analytics')">Analytics</button>
+        <button class="nav-link" onclick="App.tabs.switch('history')">History</button>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
           <span id="themeIcon">🌙</span>
         </button>
@@ -1491,7 +1361,6 @@
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
   <section class="hero">
     <div class="hero-content">
       <div class="hero-badge">
@@ -1503,28 +1372,22 @@
         Advanced AI-powered analysis with batch processing, visual analytics, pattern detection, and comprehensive reporting.
       </p>
       <div class="hero-cta">
-        <button class="btn btn-primary" onclick="scrollToAnalyzer()">
+        <button class="btn btn-primary" onclick="App.utils.scrollToAnalyzer()">
           🚀 Start Analyzing
         </button>
-        <button class="btn btn-secondary" onclick="loadExample('suspicious')">
+        <button class="btn btn-secondary" onclick="App.examples.load('suspicious')">
           Try Demo
         </button>
       </div>
     </div>
   </section>
 
-  <!-- TABS SECTION -->
   <section class="tabs-container">
     <div class="tabs-wrapper">
-      <!-- Tab Navigation -->
       <div class="tabs-nav">
-        <button class="tab-button active" data-tab="single">
+        <button class="tab-button active" data-tab="analyze">
           <span>🔍</span>
-          <span>Single Analysis</span>
-        </button>
-        <button class="tab-button" data-tab="batch">
-          <span>📊</span>
-          <span>Batch Analysis</span>
+          <span>Analyze Review</span>
         </button>
         <button class="tab-button" data-tab="analytics">
           <span>📈</span>
@@ -1536,8 +1399,7 @@
         </button>
       </div>
 
-      <!-- SINGLE ANALYSIS TAB -->
-      <div class="tab-content active" data-content="single">
+      <div class="tab-content active" data-content="analyze">
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-icon">📊</div>
@@ -1562,20 +1424,18 @@
         </div>
 
         <div class="analyzer-card">
-          <!-- Quick Actions -->
           <div class="quick-actions">
-            <button class="quick-btn" onclick="loadExample('suspicious')">
+            <button class="quick-btn" onclick="App.examples.load('suspicious')">
               🚨 Suspicious Example
             </button>
-            <button class="quick-btn" onclick="loadExample('legit')">
+            <button class="quick-btn" onclick="App.examples.load('legit')">
               ✅ Legitimate Example
             </button>
-            <button class="quick-btn" onclick="clearForm()">
+            <button class="quick-btn" onclick="App.form.clear()">
               🗑️ Clear Form
             </button>
           </div>
 
-          <!-- Main Form -->
           <div class="form-group">
             <label class="form-label">
               <span>📝</span>
@@ -1604,8 +1464,7 @@
             >
           </div>
 
-          <!-- Advanced Options -->
-          <button class="btn btn-secondary" style="width: 100%; margin-bottom: 20px;" onclick="toggleAdvanced()">
+          <button class="btn btn-secondary" style="width: 100%; margin-bottom: 20px;" onclick="App.form.toggleAdvanced()">
             ⚙️ <span id="advancedToggleText">Show Advanced Options</span>
           </button>
 
@@ -1653,18 +1512,15 @@
             </div>
           </div>
 
-          <!-- Analyze Button -->
-          <button class="btn btn-primary" onclick="analyzeReview()" style="width: 100%; padding: 20px; font-size: 18px;">
+          <button class="btn btn-primary" onclick="App.analyzer.analyze()" style="width: 100%; padding: 20px; font-size: 18px;">
             🔍 Analyze Review
           </button>
 
-          <!-- Loading State -->
           <div id="loadingOverlay" class="loading-overlay">
             <div class="spinner"></div>
             <p class="loading-text">Analyzing patterns...</p>
           </div>
 
-          <!-- Results -->
           <div id="resultContainer" class="result-container">
             <div id="resultBox" class="result-box">
               <div class="result-header">
@@ -1699,7 +1555,6 @@
                 </div>
               </div>
 
-              <!-- Pattern Insights -->
               <div class="insights-section">
                 <h4 class="insights-title">
                   <span>🔍</span>
@@ -1708,7 +1563,6 @@
                 <div id="insightsList"></div>
               </div>
 
-              <!-- Keyword Highlighting -->
               <div class="keyword-section">
                 <h4 class="keyword-title">
                   <span>🏷️</span>
@@ -1717,15 +1571,14 @@
                 <div id="keywordCloud" class="keyword-cloud"></div>
               </div>
 
-              <!-- Export Actions -->
               <div class="export-section">
-                <button class="btn btn-secondary btn-sm" onclick="exportResult('json')">
+                <button class="btn btn-secondary btn-sm" onclick="App.export.result('json')">
                   📄 Export JSON
                 </button>
-                <button class="btn btn-secondary btn-sm" onclick="exportResult('csv')">
+                <button class="btn btn-secondary btn-sm" onclick="App.export.result('csv')">
                   📊 Export CSV
                 </button>
-                <button class="btn btn-secondary btn-sm" onclick="shareResult()">
+                <button class="btn btn-secondary btn-sm" onclick="App.export.share()">
                   🔗 Share Result
                 </button>
               </div>
@@ -1734,96 +1587,6 @@
         </div>
       </div>
 
-      <!-- BATCH ANALYSIS TAB -->
-      <div class="tab-content" data-content="batch">
-        <div class="batch-container">
-          <div class="analyzer-card">
-            <h2 style="font-size: 28px; margin-bottom: 12px;">Batch Review Analysis</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 32px;">
-              Analyze multiple reviews at once. Paste reviews separated by line breaks or upload a file.
-            </p>
-
-            <div class="form-group">
-              <label class="form-label">
-                <span>📝</span>
-                <span>Batch Reviews (one per line)</span>
-              </label>
-              <textarea 
-                id="batchReviews" 
-                class="form-input" 
-                placeholder="Paste multiple reviews here, one per line..."
-                style="min-height: 200px;"
-              ></textarea>
-              <p class="form-hint">
-                Each line will be treated as a separate review.
-              </p>
-            </div>
-
-            <div class="quick-actions">
-              <button class="quick-btn" onclick="loadBatchExample()">
-                📋 Load Example Batch
-              </button>
-              <button class="quick-btn" onclick="clearBatchForm()">
-                🗑️ Clear All
-              </button>
-            </div>
-
-            <button class="btn btn-primary" onclick="analyzeBatch()" style="width: 100%; padding: 20px; font-size: 18px; margin-top: 20px;">
-              🚀 Analyze All Reviews
-            </button>
-
-            <!-- Batch Loading -->
-            <div id="batchLoadingOverlay" class="loading-overlay">
-              <div class="spinner"></div>
-              <p class="loading-text">Analyzing <span id="batchProgress">0</span> reviews...</p>
-            </div>
-
-            <!-- Batch Results -->
-            <div id="batchResults" style="margin-top: 40px; display: none;">
-              <h3 style="font-size: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                <span>📊</span>
-                <span>Batch Analysis Results</span>
-              </h3>
-              
-              <div class="stats-grid" style="margin-bottom: 24px;">
-                <div class="stat-card">
-                  <div class="stat-icon">📋</div>
-                  <span class="stat-number" id="batchTotal">0</span>
-                  <div class="stat-label">Total Analyzed</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-icon">🚨</div>
-                  <span class="stat-number" id="batchFake">0</span>
-                  <div class="stat-label">Fake Detected</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-icon">✅</div>
-                  <span class="stat-number" id="batchLegit">0</span>
-                  <div class="stat-label">Legitimate</div>
-                </div>
-                <div class="stat-card">
-                  <div class="stat-icon">📈</div>
-                  <span class="stat-number" id="batchFakePercent">0</span>
-                  <div class="stat-label">% Fake</div>
-                </div>
-              </div>
-
-              <div id="batchReviewsList" class="batch-reviews-list"></div>
-
-              <div class="export-section" style="margin-top: 24px;">
-                <button class="btn btn-primary btn-sm" onclick="exportBatchResults('csv')">
-                  📊 Export CSV Report
-                </button>
-                <button class="btn btn-secondary btn-sm" onclick="exportBatchResults('json')">
-                  📄 Export JSON
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ANALYTICS DASHBOARD TAB -->
       <div class="tab-content" data-content="analytics">
         <div class="analyzer-card" style="margin-bottom: 24px;">
           <h2 style="font-size: 28px; margin-bottom: 12px;">Analytics Dashboard</h2>
@@ -1833,7 +1596,6 @@
         </div>
 
         <div class="dashboard-grid">
-          <!-- Detection Rate Chart -->
           <div class="chart-card">
             <div class="chart-header">
               <h3 class="chart-title">
@@ -1847,7 +1609,6 @@
             </div>
           </div>
 
-          <!-- Confidence Distribution -->
           <div class="chart-card">
             <div class="chart-header">
               <h3 class="chart-title">
@@ -1861,7 +1622,6 @@
             </div>
           </div>
 
-          <!-- Analysis Timeline -->
           <div class="chart-card" style="grid-column: span 2;">
             <div class="chart-header">
               <h3 class="chart-title">
@@ -1877,7 +1637,6 @@
         </div>
       </div>
 
-      <!-- HISTORY TAB -->
       <div class="tab-content" data-content="history">
         <div class="history-section">
           <div class="history-header">
@@ -1891,9 +1650,9 @@
                 class="history-search" 
                 id="historySearch" 
                 placeholder="🔍 Search history..."
-                oninput="searchHistory()"
+                oninput="App.history.search()"
               >
-              <button class="btn btn-secondary btn-sm" onclick="clearHistory()">
+              <button class="btn btn-secondary btn-sm" onclick="App.history.clear()">
                 🗑️ Clear All
               </button>
             </div>
@@ -1908,10 +1667,9 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-container">
-      <div class="footer-brand">ReviewGuard Ultra</div>
+      <div class="footer-brand">ReviewGuard</div>
       <p class="footer-text">
         Next-generation AI-powered fake review detection platform<br>
         Built with Machine Learning • Chart.js • scikit-learn
@@ -1922,853 +1680,809 @@
         <a href="#" class="footer-link">API</a>
         <a href="#" class="footer-link">Privacy</a>
       </div>
-      <p class="footer-copyright">
-        © 2024 ReviewGuard Ultra. Powered by AI for authenticity.
-      </p>
     </div>
   </footer>
 
-  <!-- Floating Action Button -->
-  <button class="fab" onclick="scrollToTop()" title="Back to top">
-    ↑
-  </button>
+  <button class="fab" onclick="App.utils.scrollToTop()" title="Back to top">↑</button>
 
   <script>
-    // ==================== GLOBAL STATE ====================
-    let currentResult = null;
-    let batchResults = [];
-    let charts = {};
+    'use strict';
 
-    // ==================== THEME MANAGEMENT ====================
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const html = document.documentElement;
-
-    let currentTheme = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', currentTheme);
-    themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-
-    themeToggle.addEventListener('click', () => {
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', currentTheme);
-      localStorage.setItem('theme', currentTheme);
-      themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-      
-      // Recreate charts with new theme
-      if (document.querySelector('[data-content="analytics"]').classList.contains('active')) {
-        setTimeout(() => initCharts(), 100);
-      }
-    });
-
-    // ==================== TOAST NOTIFICATIONS ====================
-    function showToast(title, message, type = 'info') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      
-      const icons = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️',
-        info: 'ℹ️'
-      };
-      
-      toast.innerHTML = `
-        <div class="toast-icon">${icons[type]}</div>
-        <div class="toast-content">
-          <div class="toast-title">${title}</div>
-          <div class="toast-message">${message}</div>
-        </div>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-      `;
-      
-      container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'slideInRight 0.4s reverse';
-        setTimeout(() => toast.remove(), 400);
-      }, 5000);
-    }
-
-    // ==================== CONFETTI ANIMATION ====================
-    function throwConfetti() {
-      const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#10b981'];
-      const confettiCount = 50;
-      
-      for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        confetti.style.animationDelay = (Math.random() * 0.5) + 's';
-        confetti.style.animation = 'confetti-fall linear forwards';
-        
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => confetti.remove(), 5000);
-      }
-    }
-
-    // ==================== NAVBAR SCROLL ====================
-    const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    });
-
-    // ==================== TAB MANAGEMENT ====================
-    const tabButtons = document.querySelectorAll('.tab-button');
-    tabButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const tabName = button.getAttribute('data-tab');
-        switchTab(tabName);
-      });
-    });
-
-    function switchTab(tabName) {
-      // Update buttons
-      tabButtons.forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-      
-      // Update content
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.querySelector(`[data-content="${tabName}"]`).classList.add('active');
-      
-      // Update nav links
-      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-      
-      // Initialize charts if analytics tab
-      if (tabName === 'analytics') {
-        setTimeout(() => initCharts(), 100);
-      }
-      
-      showToast('Navigation', `Switched to ${tabName} mode`, 'info');
-    }
-
-    // ==================== STATISTICS ====================
-    let stats = JSON.parse(localStorage.getItem('reviewguard_stats') || '{"total":0,"fake":0,"legit":0}');
-    
-    function updateStatsDisplay() {
-      animateValue('totalReviews', 0, stats.total, 2000);
-      animateValue('fakeCount', 0, stats.fake, 2000);
-      animateValue('legitCount', 0, stats.legit, 2000);
-    }
-
-    function animateValue(id, start, end, duration) {
-      const element = document.getElementById(id);
-      if (!element) return;
-      
-      const range = end - start;
-      const increment = end > start ? 1 : -1;
-      const stepTime = Math.abs(Math.floor(duration / range));
-      let current = start;
-
-      const timer = setInterval(() => {
-        current += increment;
-        element.textContent = current;
-        if (current === end) {
-          clearInterval(timer);
-        }
-      }, stepTime);
-    }
-
-    function updateStats(isFake) {
-      stats.total++;
-      if (isFake) {
-        stats.fake++;
-      } else {
-        stats.legit++;
-      }
-      localStorage.setItem('reviewguard_stats', JSON.stringify(stats));
-      updateStatsDisplay();
-    }
-
-    updateStatsDisplay();
-
-    // ==================== ADVANCED OPTIONS ====================
-    function toggleAdvanced() {
-      const content = document.getElementById('advancedOptions');
-      const text = document.getElementById('advancedToggleText');
-      
-      if (content.classList.contains('show')) {
-        content.classList.remove('show');
-        text.textContent = 'Show Advanced Options';
-      } else {
-        content.classList.add('show');
-        text.textContent = 'Hide Advanced Options';
-      }
-    }
-
-    // ==================== EXAMPLES ====================
-    function loadExample(type) {
-      const examples = {
-        suspicious: {
-          text: "AMAZING PRODUCT!!! This is the BEST thing I've ever bought in my ENTIRE LIFE!!! Everyone MUST buy this NOW!!! Don't even think twice! 100% recommend! Five stars all the way! You won't regret it! ORDER NOW!!! This changed my life FOREVER!!!",
-          rating: 5,
-          totalReviews: 12,
-          avgRating: 4.9
+    const App = (() => {
+      const CONFIG = {
+        API_URL: 'http://127.0.0.1:5000/predict',
+        API_TIMEOUT: 30000,
+        API_RETRY_ATTEMPTS: 3,
+        API_RETRY_DELAY: 1000,
+        STORAGE_KEYS: {
+          THEME: 'theme',
+          STATS: 'reviewguard_stats',
+          HISTORY: 'reviewguard_history'
         },
-        legit: {
-          text: "I purchased this product last month and have been using it regularly. The build quality is solid and it works as described in the listing. Setup was straightforward, though the instructions could be clearer. The price point is reasonable for what you get. Overall, I'm satisfied with my purchase and would recommend it to others looking for a reliable option in this category.",
-          rating: 4,
-          totalReviews: 47,
-          avgRating: 3.8
+        LIMITS: {
+          HISTORY_MAX: 50,
+          REVIEW_MIN_LENGTH: 10,
+          TOAST_DURATION: 5000
+        },
+        TOAST_ICONS: {
+          success: '✅',
+          error: '❌',
+          warning: '⚠️',
+          info: 'ℹ️'
+        },
+        KEYWORDS: {
+          suspicious: ['AMAZING', 'BEST', 'MUST', '!!!', 'ORDER', 'NOW', 'LIFE', 'FOREVER', 'PERFECT'],
+          legitimate: ['purchased', 'quality', 'satisfied', 'recommend', 'reasonable', 'works', 'delivered']
         }
       };
 
-      const example = examples[type];
-      document.getElementById('reviewText').value = example.text;
-      document.getElementById('rating').value = example.rating;
-      document.getElementById('totalReviewsInput').value = example.totalReviews;
-      document.getElementById('avgRating').value = example.avgRating;
-
-      document.getElementById('advancedOptions').classList.add('show');
-      document.getElementById('advancedToggleText').textContent = 'Hide Advanced Options';
-
-      hideResults();
-      showToast('Example Loaded', `${type} review example loaded`, 'success');
-    }
-
-    function clearForm() {
-      document.getElementById('reviewText').value = '';
-      document.getElementById('rating').value = 3;
-      document.getElementById('totalReviewsInput').value = 1;
-      document.getElementById('avgRating').value = 4.0;
-      hideResults();
-      showToast('Form Cleared', 'All fields have been reset', 'info');
-    }
-
-    function hideResults() {
-      document.getElementById('resultContainer').classList.remove('show');
-    }
-
-    // ==================== ANALYSIS ====================
-    async function analyzeReview() {
-      const reviewText = document.getElementById('reviewText').value.trim();
-      const rating = Number(document.getElementById('rating').value);
-      const totalReviews = Number(document.getElementById('totalReviewsInput').value);
-      const avgRating = Number(document.getElementById('avgRating').value);
-
-      if (!reviewText) {
-        showToast('Error', 'Please enter a review text', 'error');
-        return;
-      }
-
-      if (reviewText.length < 10) {
-        showToast('Error', 'Review text is too short (min 10 characters)', 'error');
-        return;
-      }
-
-      if (rating < 1 || rating > 5) {
-        showToast('Error', 'Rating must be between 1 and 5', 'error');
-        return;
-      }
-
-      hideResults();
-
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      loadingOverlay.classList.add('show');
-
-      try {
-        const response = await fetch('http://127.0.0.1:5000/predict', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            review_text: reviewText,
-            rating: rating,
-            reviewer_total_reviews: totalReviews,
-            reviewer_avg_rating: avgRating
-          })
-        });
-
-        loadingOverlay.classList.remove('show');
-
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        currentResult = { ...data, reviewText };
-        displayResults(data, reviewText);
-        updateStats(data.is_fake);
-        addToHistory(reviewText, data);
-
-        if (!data.is_fake) {
-          throwConfetti();
-        }
-
-        showToast(
-          'Analysis Complete',
-          data.is_fake ? 'Fake review detected!' : 'Review looks legitimate',
-          data.is_fake ? 'warning' : 'success'
-        );
-
-      } catch (error) {
-        loadingOverlay.classList.remove('show');
-        showToast(
-          'Connection Error',
-          'Make sure the Flask server is running on http://127.0.0.1:5000',
-          'error'
-        );
-        console.error('Error:', error);
-      }
-    }
-
-    // ==================== DISPLAY RESULTS ====================
-    function displayResults(data, reviewText) {
-      const resultContainer = document.getElementById('resultContainer');
-      const resultBox = document.getElementById('resultBox');
-      const resultIcon = document.getElementById('resultIcon');
-      const resultTitle = document.getElementById('resultTitle');
-      const resultSubtitle = document.getElementById('resultSubtitle');
-      const confidenceValue = document.getElementById('confidenceValue');
-      const confidenceFill = document.getElementById('confidenceFill');
-      const riskBadge = document.getElementById('riskBadge');
-      const fakeProbability = document.getElementById('fakeProbability');
-      const legitProbability = document.getElementById('legitProbability');
-
-      confidenceFill.style.width = '0%';
-      resultContainer.classList.add('show');
-
-      const isFake = data.is_fake;
-      if (isFake) {
-        resultBox.className = 'result-box fake';
-        resultIcon.textContent = '🚨';
-        resultTitle.textContent = 'Fake Review Detected';
-        resultSubtitle.textContent = 'This review shows suspicious patterns';
-      } else {
-        resultBox.className = 'result-box legit';
-        resultIcon.textContent = '✅';
-        resultTitle.textContent = 'Review Looks Legitimate';
-        resultSubtitle.textContent = 'This review appears authentic';
-      }
-
-      const confidence = Math.round(data.confidence * 100);
-      animateValue('confidenceValue', 0, confidence, 1500);
-
-      setTimeout(() => {
-        confidenceFill.style.width = confidence + '%';
-      }, 100);
-
-      const riskLevel = data.risk_level.toLowerCase();
-      riskBadge.className = `risk-badge risk-${riskLevel}`;
-      riskBadge.textContent = `${data.risk_level} RISK`;
-
-      fakeProbability.textContent = Math.round(data.fake_probability * 100) + '%';
-      legitProbability.textContent = Math.round(data.legitimate_probability * 100) + '%';
-
-      generateInsights(data, reviewText);
-      generateKeywords(reviewText, isFake);
-
-      setTimeout(() => {
-        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 200);
-    }
-
-    // ==================== GENERATE INSIGHTS ====================
-    function generateInsights(data, reviewText) {
-      const insightsList = document.getElementById('insightsList');
-      const insights = [];
-
-      const confidence = Math.round(data.confidence * 100);
-      
-      if (data.is_fake) {
-        if (confidence > 80) {
-          insights.push({
-            icon: '🎯',
-            text: 'High confidence fake review detection based on multiple suspicious patterns.'
-          });
-        }
-        
-        if (reviewText.includes('!!!') || reviewText.includes('MUST') || reviewText.includes('BEST')) {
-          insights.push({
-            icon: '⚠️',
-            text: 'Excessive use of capital letters and exclamation marks detected.'
-          });
-        }
-        
-        if (reviewText.length < 50) {
-          insights.push({
-            icon: '📏',
-            text: 'Very short review with limited detail.'
-          });
-        }
-
-        insights.push({
-          icon: '🔍',
-          text: 'Language patterns match known fake review characteristics.'
-        });
-
-      } else {
-        if (confidence > 80) {
-          insights.push({
-            icon: '✨',
-            text: 'High confidence legitimate review based on natural language patterns.'
-          });
-        }
-
-        insights.push({
-          icon: '💬',
-          text: 'Review shows balanced sentiment and specific details.'
-        });
-
-        insights.push({
-          icon: '🎯',
-          text: 'No suspicious patterns or manipulation tactics detected.'
-        });
-      }
-
-      insightsList.innerHTML = insights.map(insight => `
-        <div class="insight-item">
-          <span class="insight-icon">${insight.icon}</span>
-          <span class="insight-text">${insight.text}</span>
-        </div>
-      `).join('');
-    }
-
-    // ==================== GENERATE KEYWORDS ====================
-    function generateKeywords(reviewText, isFake) {
-      const keywordCloud = document.getElementById('keywordCloud');
-      const suspiciousKeywords = ['AMAZING', 'BEST', 'MUST', '!!!', 'ORDER', 'NOW', 'LIFE', 'FOREVER'];
-      const legitKeywords = ['purchased', 'quality', 'satisfied', 'recommend', 'reasonable'];
-      
-      const foundKeywords = [];
-      const text = reviewText.toUpperCase();
-      
-      suspiciousKeywords.forEach(keyword => {
-        if (text.includes(keyword)) {
-          foundKeywords.push({ text: keyword, type: 'suspicious' });
-        }
-      });
-      
-      legitKeywords.forEach(keyword => {
-        if (reviewText.toLowerCase().includes(keyword.toLowerCase())) {
-          foundKeywords.push({ text: keyword, type: 'legit' });
-        }
-      });
-      
-      if (foundKeywords.length === 0) {
-        keywordCloud.innerHTML = '<p style="color: var(--text-secondary); font-size: 14px;">No significant patterns detected</p>';
-        return;
-      }
-      
-      keywordCloud.innerHTML = foundKeywords.map(kw => 
-        `<span class="keyword-tag ${kw.type === 'legit' ? 'legit' : ''}">${kw.text}</span>`
-      ).join('');
-    }
-
-    // ==================== EXPORT FUNCTIONALITY ====================
-    function exportResult(format) {
-      if (!currentResult) {
-        showToast('Error', 'No results to export', 'error');
-        return;
-      }
-
-      const data = {
-        reviewText: currentResult.reviewText,
-        isFake: currentResult.is_fake,
-        confidence: Math.round(currentResult.confidence * 100),
-        riskLevel: currentResult.risk_level,
-        fakeProbability: Math.round(currentResult.fake_probability * 100),
-        legitProbability: Math.round(currentResult.legitimate_probability * 100),
-        timestamp: new Date().toISOString()
+      const state = {
+        currentResult: null,
+        charts: {},
+        apiCache: new Map(),
+        theme: localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light',
+        domCache: {}
       };
 
-      if (format === 'json') {
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        downloadFile(blob, `review-analysis-${Date.now()}.json`);
-      } else if (format === 'csv') {
-        const csv = `Review Text,Is Fake,Confidence,Risk Level,Fake Probability,Legit Probability,Timestamp\n"${data.reviewText}",${data.isFake},${data.confidence}%,${data.riskLevel},${data.fakeProbability}%,${data.legitProbability}%,${data.timestamp}`;
-        const blob = new Blob([csv], { type: 'text/csv' });
-        downloadFile(blob, `review-analysis-${Date.now()}.csv`);
-      }
+      const dom = {
+        cache: {},
+        get(id) {
+          if (!this.cache[id]) {
+            this.cache[id] = document.getElementById(id);
+          }
+          return this.cache[id];
+        },
+        query(selector) {
+          return document.querySelector(selector);
+        },
+        queryAll(selector) {
+          return document.querySelectorAll(selector);
+        }
+      };
 
-      showToast('Export Complete', `Results exported as ${format.toUpperCase()}`, 'success');
-    }
+      const storage = {
+        get(key) {
+          try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+          } catch {
+            return null;
+          }
+        },
+        set(key, value) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+            return true;
+          } catch {
+            return false;
+          }
+        },
+        remove(key) {
+          localStorage.removeItem(key);
+        }
+      };
 
-    function downloadFile(blob, filename) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+      const validator = {
+        reviewText(text) {
+          if (!text || typeof text !== 'string') {
+            return { valid: false, error: 'Please enter a review text' };
+          }
+          if (text.trim().length < CONFIG.LIMITS.REVIEW_MIN_LENGTH) {
+            return { valid: false, error: `Review must be at least ${CONFIG.LIMITS.REVIEW_MIN_LENGTH} characters` };
+          }
+          return { valid: true };
+        },
+        rating(rating) {
+          const num = Number(rating);
+          if (isNaN(num) || num < 1 || num > 5) {
+            return { valid: false, error: 'Rating must be between 1 and 5' };
+          }
+          return { valid: true };
+        },
+        sanitize(text) {
+          return text.replace(/[<>]/g, '').trim();
+        }
+      };
 
-    function shareResult() {
-      if (!currentResult) {
-        showToast('Error', 'No results to share', 'error');
-        return;
-      }
+      const api = {
+        async request(endpoint, data, retries = CONFIG.API_RETRY_ATTEMPTS) {
+          const cacheKey = JSON.stringify(data);
+          if (state.apiCache.has(cacheKey)) {
+            return state.apiCache.get(cacheKey);
+          }
 
-      const text = `ReviewGuard Analysis: ${currentResult.is_fake ? 'Fake' : 'Legitimate'} review detected with ${Math.round(currentResult.confidence * 100)}% confidence`;
-      
-      if (navigator.share) {
-        navigator.share({
-          title: 'ReviewGuard Analysis',
-          text: text
-        }).then(() => {
-          showToast('Shared', 'Result shared successfully', 'success');
-        }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(text);
-        showToast('Copied', 'Result copied to clipboard', 'success');
-      }
-    }
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
 
-    // ==================== BATCH ANALYSIS ====================
-    function loadBatchExample() {
-      const examples = [
-        "AMAZING product! BEST purchase ever! BUY NOW!!!",
-        "Good quality product. Works as described. Happy with purchase.",
-        "MUST HAVE item! Changed my LIFE!!! ORDER TODAY!!!",
-        "Decent product for the price. Some minor issues but overall satisfied.",
-        "Absolute PERFECTION! Five stars! HIGHLY recommend!!!"
-      ];
-      
-      document.getElementById('batchReviews').value = examples.join('\n');
-      showToast('Example Loaded', '5 sample reviews loaded', 'success');
-    }
-
-    function clearBatchForm() {
-      document.getElementById('batchReviews').value = '';
-      document.getElementById('batchResults').style.display = 'none';
-      showToast('Form Cleared', 'Batch form reset', 'info');
-    }
-
-    async function analyzeBatch() {
-      const batchText = document.getElementById('batchReviews').value.trim();
-      if (!batchText) {
-        showToast('Error', 'Please enter reviews to analyze', 'error');
-        return;
-      }
-
-      const reviews = batchText.split('\n').filter(r => r.trim().length > 10);
-      if (reviews.length === 0) {
-        showToast('Error', 'No valid reviews found', 'error');
-        return;
-      }
-
-      const loadingOverlay = document.getElementById('batchLoadingOverlay');
-      const progressSpan = document.getElementById('batchProgress');
-      loadingOverlay.classList.add('show');
-
-      batchResults = [];
-      let fakeCount = 0;
-
-      for (let i = 0; i < reviews.length; i++) {
-        progressSpan.textContent = i + 1;
-        
-        try {
-          const response = await fetch('http://127.0.0.1:5000/predict', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              review_text: reviews[i],
-              rating: 3,
-              reviewer_total_reviews: 1,
-              reviewer_avg_rating: 4.0
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            batchResults.push({
-              text: reviews[i],
-              isFake: data.is_fake,
-              confidence: Math.round(data.confidence * 100)
+          try {
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+              signal: controller.signal
             });
-            if (data.is_fake) fakeCount++;
-            updateStats(data.is_fake);
+
+            clearTimeout(timeout);
+
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            state.apiCache.set(cacheKey, result);
+            return result;
+
+          } catch (error) {
+            clearTimeout(timeout);
+
+            if (retries > 0 && error.name !== 'AbortError') {
+              await this.delay(CONFIG.API_RETRY_DELAY);
+              return this.request(endpoint, data, retries - 1);
+            }
+
+            throw this.formatError(error);
           }
-        } catch (error) {
-          console.error('Batch analysis error:', error);
+        },
+        formatError(error) {
+          if (error.name === 'AbortError') {
+            return new Error('Request timeout. Please try again.');
+          }
+          if (error.message.includes('Failed to fetch')) {
+            return new Error('Unable to connect to API. Ensure the server is running on http://127.0.0.1:5000');
+          }
+          return error;
+        },
+        delay(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
         }
-
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
-
-      loadingOverlay.classList.remove('show');
-      displayBatchResults();
-      showToast('Batch Complete', `Analyzed ${reviews.length} reviews`, 'success');
-    }
-
-    function displayBatchResults() {
-      document.getElementById('batchResults').style.display = 'block';
-      
-      const total = batchResults.length;
-      const fake = batchResults.filter(r => r.isFake).length;
-      const legit = total - fake;
-      const fakePercent = Math.round((fake / total) * 100);
-
-      document.getElementById('batchTotal').textContent = total;
-      document.getElementById('batchFake').textContent = fake;
-      document.getElementById('batchLegit').textContent = legit;
-      document.getElementById('batchFakePercent').textContent = fakePercent;
-
-      const listHtml = batchResults.map(result => `
-        <div class="batch-review-item">
-          <div class="batch-review-status">${result.isFake ? '🚨' : '✅'}</div>
-          <div class="batch-review-text">${result.text}</div>
-          <div style="font-size: 13px; color: var(--text-secondary); min-width: 80px; text-align: right;">
-            ${result.confidence}% conf
-          </div>
-        </div>
-      `).join('');
-
-      document.getElementById('batchReviewsList').innerHTML = listHtml;
-
-      setTimeout(() => {
-        document.getElementById('batchResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
-    }
-
-    function exportBatchResults(format) {
-      if (batchResults.length === 0) {
-        showToast('Error', 'No batch results to export', 'error');
-        return;
-      }
-
-      if (format === 'csv') {
-        let csv = 'Review Text,Result,Confidence\n';
-        batchResults.forEach(r => {
-          csv += `"${r.text}",${r.isFake ? 'Fake' : 'Legitimate'},${r.confidence}%\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv' });
-        downloadFile(blob, `batch-analysis-${Date.now()}.csv`);
-      } else if (format === 'json') {
-        const blob = new Blob([JSON.stringify(batchResults, null, 2)], { type: 'application/json' });
-        downloadFile(blob, `batch-analysis-${Date.now()}.json`);
-      }
-
-      showToast('Export Complete', 'Batch results exported', 'success');
-    }
-
-    // ==================== CHARTS ====================
-    function initCharts() {
-      // Destroy existing charts
-      Object.values(charts).forEach(chart => {
-        if (chart) chart.destroy();
-      });
-
-      const isDark = currentTheme === 'dark';
-      const textColor = isDark ? '#e9ecef' : '#1a1a2e';
-      const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-
-      Chart.defaults.color = textColor;
-      Chart.defaults.borderColor = gridColor;
-
-      // Detection Rate Chart
-      const detectionCtx = document.getElementById('detectionChart');
-      if (detectionCtx) {
-        charts.detection = new Chart(detectionCtx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Fake', 'Legitimate'],
-            datasets: [{
-              data: [stats.fake, stats.legit],
-              backgroundColor: [
-                'rgba(239, 68, 68, 0.8)',
-                'rgba(16, 185, 129, 0.8)'
-              ],
-              borderWidth: 0
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }
-        });
-      }
-
-      // Confidence Distribution
-      const confidenceCtx = document.getElementById('confidenceChart');
-      if (confidenceCtx) {
-        charts.confidence = new Chart(confidenceCtx, {
-          type: 'bar',
-          data: {
-            labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
-            datasets: [{
-              label: 'Reviews',
-              data: [2, 5, 8, 15, 25],
-              backgroundColor: 'rgba(102, 126, 234, 0.8)',
-              borderRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: {
-                  color: gridColor
-                }
-              },
-              x: {
-                grid: {
-                  display: false
-                }
-              }
-            }
-          }
-        });
-      }
-
-      // Timeline Chart
-      const timelineCtx = document.getElementById('timelineChart');
-      if (timelineCtx) {
-        charts.timeline = new Chart(timelineCtx, {
-          type: 'line',
-          data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-              label: 'Reviews Analyzed',
-              data: [12, 19, 15, 25, 22, 30, 28],
-              borderColor: 'rgba(102, 126, 234, 1)',
-              backgroundColor: 'rgba(102, 126, 234, 0.1)',
-              tension: 0.4,
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: {
-                  color: gridColor
-                }
-              },
-              x: {
-                grid: {
-                  display: false
-                }
-              }
-            }
-          }
-        });
-      }
-    }
-
-    // ==================== HISTORY MANAGEMENT ====================
-    function addToHistory(reviewText, data) {
-      let history = JSON.parse(localStorage.getItem('reviewguard_history') || '[]');
-      
-      const entry = {
-        id: Date.now(),
-        text: reviewText.substring(0, 100) + (reviewText.length > 100 ? '...' : ''),
-        isFake: data.is_fake,
-        confidence: Math.round(data.confidence * 100),
-        timestamp: new Date().toLocaleString()
       };
 
-      history.unshift(entry);
-      
-      if (history.length > 50) {
-        history = history.slice(0, 50);
-      }
+      const ui = {
+        show(id) {
+          dom.get(id)?.classList.add('show');
+        },
+        hide(id) {
+          dom.get(id)?.classList.remove('show');
+        },
+        setText(id, text) {
+          const el = dom.get(id);
+          if (el) el.textContent = text;
+        },
+        setHTML(id, html) {
+          const el = dom.get(id);
+          if (el) el.innerHTML = html;
+        },
+        animateValue(id, start, end, duration) {
+          const el = dom.get(id);
+          if (!el) return;
 
-      localStorage.setItem('reviewguard_history', JSON.stringify(history));
-      renderHistory();
-    }
+          const range = end - start;
+          if (range === 0) {
+            el.textContent = end;
+            return;
+          }
 
-    function renderHistory(searchTerm = '') {
-      const historyList = document.getElementById('historyList');
-      let history = JSON.parse(localStorage.getItem('reviewguard_history') || '[]');
+          const increment = end > start ? 1 : -1;
+          const stepTime = Math.abs(Math.floor(duration / range)) || 1;
+          let current = start;
 
-      if (searchTerm) {
-        history = history.filter(entry => 
-          entry.text.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+          const timer = setInterval(() => {
+            current += increment;
+            el.textContent = current;
+            if (current === end) clearInterval(timer);
+          }, stepTime);
+        },
+        scrollTo(selector, offset = 70) {
+          const element = dom.query(selector);
+          if (element) {
+            const position = element.offsetTop - offset;
+            window.scrollTo({ top: position, behavior: 'smooth' });
+          }
+        }
+      };
 
-      if (history.length === 0) {
-        historyList.innerHTML = `
-          <div class="history-empty">
-            <p>📭 ${searchTerm ? 'No matching results found.' : 'No analysis history yet.'}<br>
-            ${searchTerm ? '' : 'Start analyzing reviews to build your history!'}</p>
-          </div>
-        `;
-        return;
-      }
+      const toast = {
+        show(title, message, type = 'info') {
+          const container = dom.get('toastContainer');
+          if (!container) return;
 
-      historyList.innerHTML = history.map(entry => `
-        <div class="history-item">
-          <div class="history-icon">${entry.isFake ? '🚨' : '✅'}</div>
-          <div class="history-content">
-            <div class="history-text">${entry.text}</div>
-            <div class="history-meta">
-              <span>${entry.isFake ? 'Fake' : 'Legitimate'}</span>
-              <span>•</span>
-              <span>${entry.confidence}% confidence</span>
-              <span>•</span>
-              <span>${entry.timestamp}</span>
+          const toast = document.createElement('div');
+          toast.className = `toast ${type}`;
+          toast.innerHTML = `
+            <div class="toast-icon">${CONFIG.TOAST_ICONS[type]}</div>
+            <div class="toast-content">
+              <div class="toast-title">${title}</div>
+              <div class="toast-message">${message}</div>
             </div>
-          </div>
-        </div>
-      `).join('');
+            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+          `;
+
+          container.appendChild(toast);
+
+          setTimeout(() => {
+            toast.style.animation = 'slideInRight 0.4s reverse';
+            setTimeout(() => toast.remove(), 400);
+          }, CONFIG.LIMITS.TOAST_DURATION);
+        }
+      };
+
+      const stats = {
+        data: storage.get(CONFIG.STORAGE_KEYS.STATS) || { total: 0, fake: 0, legit: 0 },
+        update(isFake) {
+          this.data.total++;
+          isFake ? this.data.fake++ : this.data.legit++;
+          storage.set(CONFIG.STORAGE_KEYS.STATS, this.data);
+          this.display();
+        },
+        display() {
+          ui.animateValue('totalReviews', 0, this.data.total, 2000);
+          ui.animateValue('fakeCount', 0, this.data.fake, 2000);
+          ui.animateValue('legitCount', 0, this.data.legit, 2000);
+        }
+      };
+
+      const theme = {
+        init() {
+          document.documentElement.setAttribute('data-theme', state.theme);
+          ui.setText('themeIcon', state.theme === 'dark' ? '☀️' : '🌙');
+          dom.get('themeToggle')?.addEventListener('click', () => this.toggle());
+        },
+        toggle() {
+          state.theme = state.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', state.theme);
+          storage.set(CONFIG.STORAGE_KEYS.THEME, state.theme);
+          ui.setText('themeIcon', state.theme === 'dark' ? '☀️' : '🌙');
+
+          if (tabs.current === 'analytics') {
+            setTimeout(() => charts.init(), 100);
+          }
+        }
+      };
+
+      const tabs = {
+        current: 'analyze',
+        init() {
+          dom.queryAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', () => this.switch(btn.getAttribute('data-tab')));
+          });
+        },
+        switch(tabName) {
+          this.current = tabName;
+
+          dom.queryAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          dom.query(`[data-tab="${tabName}"]`)?.classList.add('active');
+
+          dom.queryAll('.tab-content').forEach(content => content.classList.remove('active'));
+          dom.query(`[data-content="${tabName}"]`)?.classList.add('active');
+
+          if (tabName === 'analytics' && !state.charts.loaded) {
+            loadChartJS().then(() => {
+              charts.init();
+              state.charts.loaded = true;
+            }).catch(err => {
+              console.error('Failed to load Chart.js:', err);
+              toast.show('Error', 'Failed to load charts', 'error');
+            });
+          }
+
+          toast.show('Navigation', `Switched to ${tabName} mode`, 'info');
+        }
+      };
+
+      const form = {
+        toggleAdvanced() {
+          const content = dom.get('advancedOptions');
+          const text = dom.get('advancedToggleText');
+          const isShowing = content.classList.toggle('show');
+          text.textContent = isShowing ? 'Hide Advanced Options' : 'Show Advanced Options';
+        },
+        clear() {
+          dom.get('reviewText').value = '';
+          dom.get('rating').value = 3;
+          dom.get('totalReviewsInput').value = 1;
+          dom.get('avgRating').value = 4.0;
+          ui.hide('resultContainer');
+          toast.show('Form Cleared', 'All fields have been reset', 'info');
+        },
+        getData() {
+          return {
+            reviewText: validator.sanitize(dom.get('reviewText').value),
+            rating: Number(dom.get('rating').value),
+            totalReviews: Number(dom.get('totalReviewsInput').value),
+            avgRating: Number(dom.get('avgRating').value)
+          };
+        },
+        validate(data) {
+          const textCheck = validator.reviewText(data.reviewText);
+          if (!textCheck.valid) return textCheck;
+
+          const ratingCheck = validator.rating(data.rating);
+          if (!ratingCheck.valid) return ratingCheck;
+
+          return { valid: true };
+        }
+      };
+
+      const examples = {
+        data: {
+          suspicious: {
+            text: "AMAZING PRODUCT!!! This is the BEST thing I've ever bought in my ENTIRE LIFE!!! Everyone MUST buy this NOW!!! Don't even think twice! 100% recommend! Five stars all the way! You won't regret it! ORDER NOW!!! This changed my life FOREVER!!!",
+            rating: 5,
+            totalReviews: 12,
+            avgRating: 4.9
+          },
+          legit: {
+            text: "I purchased this product last month and have been using it regularly. The build quality is solid and it works as described in the listing. Setup was straightforward, though the instructions could be clearer. The price point is reasonable for what you get. Overall, I'm satisfied with my purchase and would recommend it to others looking for a reliable option in this category.",
+            rating: 4,
+            totalReviews: 47,
+            avgRating: 3.8
+          }
+        },
+        load(type) {
+          const example = this.data[type];
+          if (!example) return;
+
+          dom.get('reviewText').value = example.text;
+          dom.get('rating').value = example.rating;
+          dom.get('totalReviewsInput').value = example.totalReviews;
+          dom.get('avgRating').value = example.avgRating;
+
+          dom.get('advancedOptions').classList.add('show');
+          ui.setText('advancedToggleText', 'Hide Advanced Options');
+          
+          ui.hide('resultContainer');
+          toast.show('Example Loaded', `${type} review loaded successfully`, 'success');
+        }
+      };
+
+      const analyzer = {
+        async analyze() {
+          const formData = form.getData();
+          const validation = form.validate(formData);
+
+          if (!validation.valid) {
+            toast.show('Validation Error', validation.error, 'error');
+            return;
+          }
+
+          ui.hide('resultContainer');
+          ui.show('loadingOverlay');
+
+          try {
+            const data = await api.request(CONFIG.API_URL, {
+              review_text: formData.reviewText,
+              rating: formData.rating,
+              reviewer_total_reviews: formData.totalReviews,
+              reviewer_avg_rating: formData.avgRating
+            });
+
+            ui.hide('loadingOverlay');
+
+            state.currentResult = { ...data, reviewText: formData.reviewText };
+            results.display(data, formData.reviewText);
+            stats.update(data.is_fake);
+            history.add(formData.reviewText, data);
+
+            if (!data.is_fake) {
+              effects.confetti();
+            }
+
+            toast.show(
+              'Analysis Complete',
+              data.is_fake ? 'Fake review detected!' : 'Review looks legitimate',
+              data.is_fake ? 'warning' : 'success'
+            );
+
+          } catch (error) {
+            ui.hide('loadingOverlay');
+            toast.show('Error', error.message, 'error');
+          }
+        }
+      };
+
+      const results = {
+        display(data, reviewText) {
+          ui.show('resultContainer');
+
+          const isFake = data.is_fake;
+          const confidence = Math.round(data.confidence * 100);
+
+          dom.get('resultBox').className = `result-box ${isFake ? 'fake' : 'legit'}`;
+          ui.setText('resultIcon', isFake ? '🚨' : '✅');
+          ui.setText('resultTitle', isFake ? 'Fake Review Detected' : 'Review Looks Legitimate');
+          ui.setText('resultSubtitle', isFake ? 'Suspicious patterns found' : 'Review appears authentic');
+
+          dom.get('confidenceFill').style.width = '0%';
+          ui.animateValue('confidenceValue', 0, confidence, 1500);
+          setTimeout(() => {
+            dom.get('confidenceFill').style.width = confidence + '%';
+          }, 100);
+
+          const riskLevel = data.risk_level.toLowerCase();
+          const badge = dom.get('riskBadge');
+          badge.className = `risk-badge risk-${riskLevel}`;
+          badge.textContent = `${data.risk_level} RISK`;
+
+          ui.setText('fakeProbability', Math.round(data.fake_probability * 100) + '%');
+          ui.setText('legitProbability', Math.round(data.legitimate_probability * 100) + '%');
+
+          this.generateInsights(data, reviewText);
+          this.generateKeywords(reviewText, isFake);
+
+          setTimeout(() => {
+            dom.get('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 200);
+        },
+        generateInsights(data, reviewText) {
+          const insights = [];
+          const confidence = Math.round(data.confidence * 100);
+          const text = reviewText.toUpperCase();
+
+          if (data.is_fake) {
+            if (confidence > 80) {
+              insights.push({ icon: '🎯', text: 'High confidence detection based on multiple suspicious patterns.' });
+            }
+            if (/!!!|MUST|BEST|AMAZING/.test(text)) {
+              insights.push({ icon: '⚠️', text: 'Excessive capitalization and exclamation marks detected.' });
+            }
+            if (reviewText.length < 50) {
+              insights.push({ icon: '📏', text: 'Review is unusually short with limited detail.' });
+            }
+            insights.push({ icon: '🔍', text: 'Language patterns match known fake review characteristics.' });
+          } else {
+            if (confidence > 80) {
+              insights.push({ icon: '✨', text: 'High confidence based on natural language patterns.' });
+            }
+            insights.push({ icon: '💬', text: 'Review shows balanced sentiment and specific details.' });
+            insights.push({ icon: '🎯', text: 'No suspicious patterns or manipulation detected.' });
+          }
+
+          ui.setHTML('insightsList', insights.map(i => `
+            <div class="insight-item">
+              <span class="insight-icon">${i.icon}</span>
+              <span class="insight-text">${i.text}</span>
+            </div>
+          `).join(''));
+        },
+        generateKeywords(reviewText, isFake) {
+          const keywords = [];
+          const text = reviewText.toUpperCase();
+
+          CONFIG.KEYWORDS.suspicious.forEach(kw => {
+            if (text.includes(kw)) {
+              keywords.push({ text: kw, type: 'suspicious' });
+            }
+          });
+
+          CONFIG.KEYWORDS.legitimate.forEach(kw => {
+            if (reviewText.toLowerCase().includes(kw.toLowerCase())) {
+              keywords.push({ text: kw, type: 'legit' });
+            }
+          });
+
+          if (keywords.length === 0) {
+            ui.setHTML('keywordCloud', '<p style="color: var(--text-secondary); font-size: 14px;">No significant patterns detected</p>');
+            return;
+          }
+
+          ui.setHTML('keywordCloud', keywords.map(kw => 
+            `<span class="keyword-tag ${kw.type === 'legit' ? 'legit' : ''}">${kw.text}</span>`
+          ).join(''));
+        }
+      };
+
+      const exportModule = {
+        result(format) {
+          if (!state.currentResult) {
+            toast.show('Error', 'No results to export', 'error');
+            return;
+          }
+
+          const data = {
+            reviewText: state.currentResult.reviewText,
+            isFake: state.currentResult.is_fake,
+            confidence: Math.round(state.currentResult.confidence * 100),
+            riskLevel: state.currentResult.risk_level,
+            fakeProbability: Math.round(state.currentResult.fake_probability * 100),
+            legitProbability: Math.round(state.currentResult.legitimate_probability * 100),
+            timestamp: new Date().toISOString()
+          };
+
+          if (format === 'json') {
+            this.download(JSON.stringify(data, null, 2), `review-analysis-${Date.now()}.json`, 'application/json');
+          } else if (format === 'csv') {
+            const csv = `Review Text,Is Fake,Confidence,Risk Level,Fake Probability,Legit Probability,Timestamp\n"${data.reviewText}",${data.isFake},${data.confidence}%,${data.riskLevel},${data.fakeProbability}%,${data.legitProbability}%,${data.timestamp}`;
+            this.download(csv, `review-analysis-${Date.now()}.csv`, 'text/csv');
+          }
+
+          toast.show('Export Complete', `Exported as ${format.toUpperCase()}`, 'success');
+        },
+        share() {
+          if (!state.currentResult) {
+            toast.show('Error', 'No results to share', 'error');
+            return;
+          }
+
+          const text = `ReviewGuard Analysis: ${state.currentResult.is_fake ? 'Fake' : 'Legitimate'} review detected with ${Math.round(state.currentResult.confidence * 100)}% confidence`;
+          
+          if (navigator.share) {
+            navigator.share({ title: 'ReviewGuard Analysis', text })
+              .then(() => toast.show('Shared', 'Result shared successfully', 'success'))
+              .catch(() => {});
+          } else {
+            navigator.clipboard.writeText(text);
+            toast.show('Copied', 'Result copied to clipboard', 'success');
+          }
+        },
+        download(content, filename, mimeType) {
+          const blob = new Blob([content], { type: mimeType });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      };
+
+      const history = {
+        search: (() => {
+          let timeout;
+          return () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+              const term = dom.get('historySearch')?.value || '';
+              this.render(term);
+            }, 300);
+          };
+        })(),
+        add(reviewText, data) {
+          let history = storage.get(CONFIG.STORAGE_KEYS.HISTORY) || [];
+          
+          history.unshift({
+            id: Date.now(),
+            text: reviewText.substring(0, 100) + (reviewText.length > 100 ? '...' : ''),
+            isFake: data.is_fake,
+            confidence: Math.round(data.confidence * 100),
+            timestamp: new Date().toLocaleString()
+          });
+
+          if (history.length > CONFIG.LIMITS.HISTORY_MAX) {
+            history = history.slice(0, CONFIG.LIMITS.HISTORY_MAX);
+          }
+
+          storage.set(CONFIG.STORAGE_KEYS.HISTORY, history);
+          this.render();
+        },
+        render(searchTerm = '') {
+          let history = storage.get(CONFIG.STORAGE_KEYS.HISTORY) || [];
+
+          if (searchTerm) {
+            history = history.filter(e => e.text.toLowerCase().includes(searchTerm.toLowerCase()));
+          }
+
+          const list = dom.get('historyList');
+          if (!list) return;
+
+          if (history.length === 0) {
+            list.innerHTML = `
+              <div class="history-empty">
+                <p>📭 ${searchTerm ? 'No matching results.' : 'No analysis history yet.'}<br>
+                ${searchTerm ? '' : 'Start analyzing reviews to build your history!'}</p>
+              </div>
+            `;
+            return;
+          }
+
+          list.innerHTML = history.map(e => `
+            <div class="history-item">
+              <div class="history-icon">${e.isFake ? '🚨' : '✅'}</div>
+              <div class="history-content">
+                <div class="history-text">${e.text}</div>
+                <div class="history-meta">
+                  <span>${e.isFake ? 'Fake' : 'Legitimate'}</span>
+                  <span>•</span>
+                  <span>${e.confidence}% confidence</span>
+                  <span>•</span>
+                  <span>${e.timestamp}</span>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        },
+        clear() {
+          if (confirm('Clear all history?')) {
+            storage.remove(CONFIG.STORAGE_KEYS.HISTORY);
+            this.render();
+            toast.show('History Cleared', 'All history removed', 'info');
+          }
+        }
+      };
+
+      const charts = {
+        init() {
+          Object.values(state.charts).forEach(chart => {
+            if (chart && typeof chart.destroy === 'function') {
+              chart.destroy();
+            }
+          });
+          state.charts = {};
+
+          if (typeof Chart === 'undefined') {
+            console.error('Chart.js not loaded');
+            return;
+          }
+
+          const isDark = state.theme === 'dark';
+          const textColor = isDark ? '#e9ecef' : '#1a1a2e';
+          const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+
+          Chart.defaults.color = textColor;
+          Chart.defaults.borderColor = gridColor;
+
+          this.createDetectionChart();
+          this.createConfidenceChart();
+          this.createTimelineChart();
+        },
+        createDetectionChart() {
+          const ctx = dom.get('detectionChart');
+          if (!ctx) return;
+
+          state.charts.detection = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Fake', 'Legitimate'],
+              datasets: [{
+                data: [stats.data.fake, stats.data.legit],
+                backgroundColor: ['rgba(239,68,68,0.8)', 'rgba(16,185,129,0.8)'],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { position: 'bottom' } }
+            }
+          });
+        },
+        createConfidenceChart() {
+          const ctx = dom.get('confidenceChart');
+          if (!ctx) return;
+
+          state.charts.confidence = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+              datasets: [{
+                label: 'Reviews',
+                data: [2, 5, 8, 15, 25],
+                backgroundColor: 'rgba(102,126,234,0.8)',
+                borderRadius: 8
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        },
+        createTimelineChart() {
+          const ctx = dom.get('timelineChart');
+          if (!ctx) return;
+
+          state.charts.timeline = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              datasets: [{
+                label: 'Reviews',
+                data: [12, 19, 15, 25, 22, 30, 28],
+                borderColor: 'rgba(102,126,234,1)',
+                backgroundColor: 'rgba(102,126,234,0.1)',
+                tension: 0.4,
+                fill: true
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { beginAtZero: true },
+                x: { grid: { display: false } }
+              }
+            }
+          });
+        }
+      };
+
+      const effects = {
+        confetti() {
+          const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#10b981'];
+          const fragment = document.createDocumentFragment();
+          
+          for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.animation = 'confetti-fall linear forwards';
+            fragment.appendChild(confetti);
+          }
+          
+          document.body.appendChild(fragment);
+          
+          setTimeout(() => {
+            document.querySelectorAll('.confetti').forEach(c => c.remove());
+          }, 5000);
+        }
+      };
+
+      const utils = {
+        scrollToTop() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        scrollToAnalyzer() {
+          ui.scrollTo('.tabs-container');
+        }
+      };
+
+      const init = () => {
+        theme.init();
+        tabs.init();
+        stats.display();
+        history.render();
+
+        let ticking = false;
+        const navbar = dom.query('.navbar');
+        
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              navbar?.classList.toggle('scrolled', window.scrollY > 50);
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+
+        dom.get('reviewText')?.addEventListener('keydown', (e) => {
+          if (e.ctrlKey && e.key === 'Enter') {
+            analyzer.analyze();
+          }
+        });
+
+        toast.show('Welcome', 'ReviewGuard ready', 'success');
+      };
+
+      return {
+        init,
+        theme,
+        tabs,
+        form,
+        examples,
+        analyzer,
+        export: exportModule,
+        history,
+        charts,
+        utils,
+        toast
+      };
+    })();
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => App.init());
+    } else {
+      App.init();
     }
-
-    function searchHistory() {
-      const searchTerm = document.getElementById('historySearch').value;
-      renderHistory(searchTerm);
-    }
-
-    function clearHistory() {
-      if (confirm('Are you sure you want to clear your analysis history?')) {
-        localStorage.removeItem('reviewguard_history');
-        renderHistory();
-        showToast('History Cleared', 'All analysis history has been removed', 'info');
-      }
-    }
-
-    renderHistory();
-
-    // ==================== UTILITY FUNCTIONS ====================
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function scrollToAnalyzer() {
-      document.querySelector('.tabs-container').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Keyboard shortcut
-    document.getElementById('reviewText')?.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'Enter') {
-        analyzeReview();
-      }
-    });
-
-    // Initialize
-    showToast('Welcome', 'ReviewGuard Ultra loaded successfully', 'success');
   </script>
 
 </body>
