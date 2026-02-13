@@ -10,8 +10,6 @@
 <img src="https://img.shields.io/badge/Recall-93%25-yellow?style=for-the-badge" />
 <img src="https://img.shields.io/badge/Use%20Case-Fake%20Review%20Detection-orange?style=for-the-badge" />
 <img src="https://img.shields.io/badge/Python-3.9%2B-blueviolet?style=for-the-badge" />
-<img src="https://img.shields.io/badge/License-MIT-black?style=for-the-badge" />
-
 </p>
 
 An NLP-driven **Fake Review Detection System** that classifies product and service reviews as **Genuine** or **Fraudulent** using feature-engineered linguistic signals, statistical modeling, and supervised machine learning.
