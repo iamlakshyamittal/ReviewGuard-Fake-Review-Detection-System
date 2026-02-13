@@ -67,22 +67,28 @@ Prediction Output
 ---
 
 ## Folder Structure
-
 ```
-ReviewGuard/
+📦 ReviewGuard – Fake Review Detection System
 │
-├── src/                    # Core preprocessing and utilities
-├── data/
-│   └── train_reviews.csv   # Training dataset
-├── models/                 # Trained ML models
-├── config/                 # Configuration files
+├── 📁 src/                         → Core preprocessing & utility modules
 │
-├── app.py                  # Application entry point
-├── train_model.py          # Model training pipeline
-├── test_api.py             # API testing
-├── index.html              # Frontend interface
-├── requirements.txt        # Python dependencies
-└── .gitignore              # Ignored files and folders
+├── 📁 data/                        → Dataset storage
+│   └── 🗂️ train_reviews.csv        → Training dataset
+│
+├── 📁 models/                      → Saved / trained ML models
+│
+├── 📁 config/                      → Configuration & parameter files
+│
+├── 📁 templates/                   → Frontend UI (Git-ignored)
+│   └── 🌐 index.html               → User input interface
+│
+├── 🚀 app.py                       → Application entry point
+├── 🧠 train_model.py               → Model training pipeline
+├── 🧪 test_api.py                  → API testing script
+│
+├── 📜 requirements.txt             → Python dependencies
+└── 🙈 .gitignore                   → Ignored files & folders
+
 ```
 
 ---
