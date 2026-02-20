@@ -1690,7 +1690,7 @@
 
     const App = (() => {
       const CONFIG = {
-        API_URL: 'http://127.0.0.1:5000/predict',
+        API_URL: '/predict',
         API_TIMEOUT: 30000,
         API_RETRY_ATTEMPTS: 3,
         API_RETRY_DELAY: 1000,
@@ -1973,14 +1973,15 @@
         toggleAdvanced() {
           const content = dom.get('advancedOptions');
           const text = dom.get('advancedToggleText');
+          if (!content || !text) return;
           const isShowing = content.classList.toggle('show');
           text.textContent = isShowing ? 'Hide Advanced Options' : 'Show Advanced Options';
         },
         clear() {
-          dom.get('reviewText').value = '';
-          dom.get('rating').value = 3;
-          dom.get('totalReviewsInput').value = 1;
-          dom.get('avgRating').value = 4.0;
+          if (dom.get('reviewText')) dom.get('reviewText').value = '';
+          if (dom.get('rating')) dom.get('rating').value = 3;
+          if (dom.get('totalReviewsInput')) dom.get('totalReviewsInput').value = 1;
+          if (dom.get('avgRating')) dom.get('avgRating').value = 4.0;
           ui.hide('resultContainer');
           toast.show('Form Cleared', 'All fields have been reset', 'info');
         },
@@ -2172,6 +2173,9 @@
       };
 
       const exportModule = {
+        toCSVSafe(value) {
+          return `"${String(value ?? '').replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`;
+        },
         result(format) {
           if (!state.currentResult) {
             toast.show('Error', 'No results to export', 'error');
@@ -2191,7 +2195,18 @@
           if (format === 'json') {
             this.download(JSON.stringify(data, null, 2), `review-analysis-${Date.now()}.json`, 'application/json');
           } else if (format === 'csv') {
-            const csv = `Review Text,Is Fake,Confidence,Risk Level,Fake Probability,Legit Probability,Timestamp\n"${data.reviewText}",${data.isFake},${data.confidence}%,${data.riskLevel},${data.fakeProbability}%,${data.legitProbability}%,${data.timestamp}`;
+            const csv = [
+              'Review Text,Is Fake,Confidence,Risk Level,Fake Probability,Legit Probability,Timestamp',
+              [
+                this.toCSVSafe(data.reviewText),
+                data.isFake,
+                `${data.confidence}%`,
+                data.riskLevel,
+                `${data.fakeProbability}%`,
+                `${data.legitProbability}%`,
+                this.toCSVSafe(data.timestamp)
+              ].join(',')
+            ].join('\n');
             this.download(csv, `review-analysis-${Date.now()}.csv`, 'text/csv');
           }
 
@@ -2210,8 +2225,13 @@
               .then(() => toast.show('Shared', 'Result shared successfully', 'success'))
               .catch(() => {});
           } else {
-            navigator.clipboard.writeText(text);
-            toast.show('Copied', 'Result copied to clipboard', 'success');
+            if (navigator.clipboard?.writeText) {
+              navigator.clipboard.writeText(text)
+                .then(() => toast.show('Copied', 'Result copied to clipboard', 'success'))
+                .catch(() => toast.show('Error', 'Clipboard write failed', 'error'));
+            } else {
+              toast.show('Error', 'Clipboard API unavailable in this browser', 'error');
+            }
           }
         },
         download(content, filename, mimeType) {
@@ -2234,7 +2254,7 @@
             clearTimeout(timeout);
             timeout = setTimeout(() => {
               const term = dom.get('historySearch')?.value || '';
-              this.render(term);
+              history.render(term);
             }, 300);
           };
         })(),
